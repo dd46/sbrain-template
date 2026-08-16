@@ -17,13 +17,16 @@ When the user asks about **anything other than building or changing this Second 
 
 App-development prompts (MCP server, sync, tests, infra, `context/changes/`) follow the repo sections below instead.
 
+Browser chat (`npm run chat`, `web/` + LangGraph) is a separate path from Cursor MCP; it does not auto-append `docs/conversations/` unless the user asks the agent to write files there.
+
 ## Project structure
 
 | Path | Role |
 |------|------|
 | `docs/` | Knowledge base (namespaces, notes, `recommendations.md`) |
 | `docs/conversations/` | Chat session history (not synced to Neo4j) |
-| `lib/` | Parser, Neo4j sync, KB query helpers |
+| `lib/` | Parser, Neo4j sync, KB query helpers, LangGraph chat agent |
+| `web/` | Local Next.js chat UI (LangGraph streaming) |
 | `mcp_server/` | MCP server (`sbrain`) |
 | `scripts/sync_to_neo4j.js` | Catalog → Neo4j loader |
 | `context/` | Change plans and foundation docs (app work) |
@@ -35,6 +38,7 @@ App-development prompts (MCP server, sync, tests, infra, `context/changes/`) fol
 | `npm install` | Install dependencies |
 | `docker-compose up -d` | Start Neo4j |
 | `npm run sync` | Reload graph from `docs/` |
+| `npm run chat` | Start local chat UI (`web/`) |
 | `npm run kb:promote -- <session.md> <target/path>` | Promote conversation → structured KB note |
 | `npm test` | Parser unit tests (no Docker) |
 | `npm run test:integration` | Graph + MCP tool tests (Neo4j required) |

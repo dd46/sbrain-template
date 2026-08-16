@@ -36,11 +36,23 @@ This repo includes `.cursor/mcp.json`. Reload the Cursor window (or restart MCP)
 
 Neo4j must be running and the catalog synced before tools return useful results.
 
+### Chat UI (browser)
+
+A local Next.js app runs a LangGraph agent that calls the same `lib/kb-tools.js` helpers as MCP (not through MCP). Conversation memory uses LangGraph **MemorySaver** in the Node process — restarting the chat server clears threads.
+
+```bash
+cp .env.example .env   # set OPENAI_API_KEY (and Neo4j vars if needed)
+npm run chat           # http://127.0.0.1:3000
+```
+
+Neo4j must be up and the catalog synced for KB search tools to return useful results. Cursor MCP remains available in parallel for IDE chat.
+
 ## Scripts
 
 | Command | Purpose |
 | ------- | ------- |
 | `npm run sync` | Parse `docs/`, embed bodies locally (Xenova), wipe-reload Neo4j |
+| `npm run chat` | Start the local chat UI (`web/`, LangGraph + streaming) |
 | `npm run mcp` | Start the MCP server on STDIO (Cursor does this automatically) |
 | `npm test` | Parser unit tests (no Docker) |
 | `npm run test:integration` | Graph + tool tests (requires Neo4j up) |

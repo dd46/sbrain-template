@@ -23,7 +23,8 @@ This repo is a **Second Brain**. Session knowledge lives in `docs/conversations/
 
 ## Exemptions
 
-- Pure app-development (`lib/`, `mcp_server/`, `scripts/`, `tests/`, `context/changes/`).
+- Pure app-development (`lib/`, `mcp_server/`, `scripts/`, `tests/`, `context/changes/`, `web/`).
+- Browser chat in `web/` (LangGraph UI) — no automatic `docs/conversations/` writes unless the user asks there.
 - Trivial replies ("ok", "done", clarifying questions).
 
 ## If KB already has the answer
