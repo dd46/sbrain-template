@@ -368,8 +368,8 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Manual
 
-- [ ] 1.7 Neo4j Browser accepts neo4j/password123 at localhost:7474
-- [ ] 1.8 APOC procedures are available
+- [x] 1.7 Neo4j Browser accepts neo4j/password123 at localhost:7474
+- [x] 1.8 APOC procedures are available
 
 ### Phase 2: Catalog parser + sync
 
@@ -382,8 +382,8 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Manual
 
-- [ ] 2.5 Browser shows CHILD_OF hierarchy from root ""
-- [ ] 2.6 sailing.basics aerodynamics Intent has Resource nodes
+- [x] 2.5 Browser shows CHILD_OF hierarchy from root ""
+- [x] 2.6 sailing.basics aerodynamics Intent has Resource nodes
 
 ### Phase 3: MCP server + Cursor wiring
 
@@ -396,9 +396,9 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Manual
 
-- [ ] 3.5 Cursor lists the four tools
-- [ ] 3.6 search_by_namespace on root finds wind
-- [ ] 3.7 get_recommendations returns sailing.basics intents
+- [x] 3.5 Cursor lists the four tools
+- [x] 3.6 search_by_namespace on root finds wind
+- [x] 3.7 get_recommendations returns sailing.basics intents
 
 ### Phase 4: Verification + first-run docs
 
@@ -411,5 +411,5 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Manual
 
-- [ ] 4.5 README cold-start walkthrough works in Cursor
-- [ ] 4.6 trigger_sync reflects a reversible seed edit then the edit is reverted
+- [x] 4.5 README cold-start walkthrough works in Cursor
+- [x] 4.6 trigger_sync reflects a reversible seed edit then the edit is reverted
