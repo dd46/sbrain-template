@@ -18,42 +18,48 @@ test("parseCatalog includes root namespace with empty string id", () => {
   assert.equal(root.parentId, null);
 });
 
-test("wind.md parses to sailing/basics path and namespace", () => {
+test("polish_sailing_license.md parses in licenses_certificates namespace", () => {
   const catalog = parseCatalog(seedDocs);
-  const wind = catalog.documents.find((d) => d.path === "sailing/basics/wind");
-  assert.ok(wind);
-  assert.equal(wind.namespaceId, "sailing.basics");
-  assert.equal(wind.type, "concept");
-  assert.ok(wind.tags.includes("wind"));
+  const note = catalog.documents.find(
+    (d) => d.path === "sailing/licenses_certificates/polish_sailing_license",
+  );
+  assert.ok(note);
+  assert.equal(note.namespaceId, "sailing.licenses_certificates");
+  assert.equal(note.type, "manual");
+  assert.ok(note.tags.includes("pzz"));
 });
 
-test("wind.md has wiki-link to sailing certificate", () => {
+test("polish_sailing_license links to motorboat license", () => {
   const catalog = parseCatalog(seedDocs);
   const edge = catalog.referenceEdges.find(
     (e) =>
-      e.fromPath === "sailing/basics/wind" &&
-      e.toPath === "sailing/licenses_certificates/sailing_certificate",
+      e.fromPath === "sailing/licenses_certificates/polish_sailing_license" &&
+      e.toPath === "sailing/licenses_certificates/polish_motorboat_license",
   );
-  assert.ok(edge, "expected REFERENCES edge from wind to certificate");
+  assert.ok(edge, "expected REFERENCES edge between polish license notes");
 });
 
-test("root recommendations.md yields intents not documents", () => {
+test("licenses_certificates recommendations.md yields intents not documents", () => {
   const catalog = parseCatalog(seedDocs);
-  const rootDoc = catalog.documents.find((d) => d.path === "recommendations");
-  assert.equal(rootDoc, undefined);
-  const rootIntents = catalog.intentBundles.filter((b) => b.intent.namespaceId === "");
-  assert.ok(rootIntents.length > 0);
+  const recDoc = catalog.documents.find(
+    (d) => d.path === "sailing/licenses_certificates/recommendations",
+  );
+  assert.equal(recDoc, undefined);
+  const intents = catalog.intentBundles.filter(
+    (b) => b.intent.namespaceId === "sailing.licenses_certificates",
+  );
+  assert.ok(intents.length > 0);
 });
 
-test("sailing.basics recommendations include aerodynamics intent", () => {
+test("licenses_certificates recommendations include Poland certificate intent", () => {
   const catalog = parseCatalog(seedDocs);
   const bundle = catalog.intentBundles.find(
     (b) =>
-      b.intent.namespaceId === "sailing.basics" &&
-      b.intent.query === "I want to understand sail aerodynamics",
+      b.intent.namespaceId === "sailing.licenses_certificates" &&
+      b.intent.query === "I want to know which certificate I need (Poland)",
   );
   assert.ok(bundle);
-  assert.ok(bundle.resources.some((r) => r.url.includes("youtube.com")));
+  assert.ok(bundle.resources.some((r) => r.url.includes("pya.org.pl")));
 });
 
 test("normalizeWikiPath strips docs prefix and .md suffix", () => {

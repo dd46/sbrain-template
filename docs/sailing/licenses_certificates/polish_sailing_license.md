@@ -66,7 +66,6 @@ A sailing certificate covers auxiliary engine use on a sailboat. For a **dedicat
 ### Internal
 - [[sailing/licenses_certificates/polish_motorboat_license]]
 - [[sailing/licenses_certificates/sailing_certificate]]
-- [[sailing/basics/wind]]
 ### External
 - [PZŻ patents](https://pya.org.pl)
 - [Patent application portal](https://patenty.pya.org.pl)
