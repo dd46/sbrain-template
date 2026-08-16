@@ -1,10 +1,10 @@
 ---
 change_id: kb-mcp-runtime
 title: Stand up Neo4j sync and MCP for the docs knowledge base
-status: implemented
+status: archived
 created: 2026-08-16
 updated: 2026-08-16
-archived_at: null
+archived_at: 2026-08-16T14:38:53Z
 ---
 
 ## Notes
