@@ -359,12 +359,12 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [x] 1.1 package.json is ESM with the required dependencies
-- [x] 1.2 npm install succeeds and lists neo4j-driver, sdk, gray-matter, zod
-- [x] 1.3 .gitignore ignores node_modules/ and .env
-- [x] 1.4 docker compose config is valid and has neo4j only
-- [x] 1.5 compose pins neo4j:5.12.0 and APOC via NEO4J_PLUGINS JSON string
-- [x] 1.6 mcp_server/Dockerfile exists on node:20
+- [x] 1.1 package.json is ESM with the required dependencies — 85df4fe
+- [x] 1.2 npm install succeeds and lists neo4j-driver, sdk, gray-matter, zod — 85df4fe
+- [x] 1.3 .gitignore ignores node_modules/ and .env — 85df4fe
+- [x] 1.4 docker compose config is valid and has neo4j only — 85df4fe
+- [x] 1.5 compose pins neo4j:5.12.0 and APOC via NEO4J_PLUGINS JSON string — 85df4fe
+- [x] 1.6 mcp_server/Dockerfile exists on node:20 — 85df4fe
 
 #### Manual
 
@@ -375,10 +375,10 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [ ] 2.1 parser unit tests pass
-- [ ] 2.2 npm run sync is idempotent on the sailing seed
-- [ ] 2.3 graph contains root Namespace "", Documents with extra frontmatter, REFERENCES, and Intents
-- [ ] 2.4 wipe runs inside a write transaction after validation
+- [x] 2.1 parser unit tests pass
+- [x] 2.2 npm run sync is idempotent on the sailing seed
+- [x] 2.3 graph contains root Namespace "", Documents with extra frontmatter, REFERENCES, and Intents
+- [x] 2.4 wipe runs inside a write transaction after validation
 
 #### Manual
 
