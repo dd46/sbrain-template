@@ -7,7 +7,8 @@ namespace: "sailing.licenses_certificates"
 - [PZMWiNW — patenty motorowodne](https://www.motorowodniacy.org/patenty.html)
 - [Co można prowadzić bez patentu](https://akademiasternika.pl/blog/co-mozna-prowadzic-bez-patentu)
 - [Patent żeglarza jachtowego — przewodnik 2026](https://sailing.org.pl/patent-zeglarza-jachtowego-2026/)
-- [Patent sternika motorowodnego — przewodnik 2026](https://sailing.org.pl/patent-sternika-motorowodnego/)
+- [Baza pytań egzaminacyjnych SM](https://akademiasternika.pl/blog/pytania-egzaminacyjne-sternik-baza)
+- [Jak wygląda egzamin SM 2026](https://akademiasternika.pl/blog/jak-wyglada-egzamin-na-sternika-motorowodnego)
 - [Czarter bez patentu 2026](https://sailing.org.pl/czarter-jachtu-bez-patentu/)
 
 # I want to know which certificate I need (international)

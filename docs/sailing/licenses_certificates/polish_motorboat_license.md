@@ -28,6 +28,8 @@ Without SM you can still operate smaller boats — see [[sailing/licenses_certif
 
 ## Exam
 
+Full syllabus: [[sailing/licenses_certificates/sm_exam_syllabus]]. Summary below.
+
 Two parts on the same day:
 
 ### Theory
@@ -87,6 +89,7 @@ For sailboats with auxiliary engine, a sailing certificate is sufficient. For de
 ---
 ## References
 ### Internal
+- [[sailing/licenses_certificates/sm_exam_syllabus]]
 - [[sailing/licenses_certificates/operating_without_license]]
 - [[sailing/licenses_certificates/polish_sailing_license]]
 - [[sailing/licenses_certificates/sailing_certificate]]
