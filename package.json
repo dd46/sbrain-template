@@ -1,0 +1,21 @@
+{
+  "name": "sbrain-template",
+  "version": "1.0.0",
+  "description": "Second Brain — Markdown catalog synced to Neo4j with MCP tools for Cursor",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "sync": "node scripts/sync_to_neo4j.js",
+    "mcp": "node mcp_server/server.js",
+    "test": "node --test tests/parse-catalog.test.js",
+    "test:integration": "node --test tests/integration/sync-graph.test.js tests/integration/kb-tools.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "gray-matter": "^4.0.3",
+    "neo4j-driver": "^5.28.1",
+    "zod": "^3.24.2"
+  }
+}

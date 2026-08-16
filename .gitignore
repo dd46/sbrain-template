@@ -2,3 +2,6 @@
 # (symlinks; no trailing slash so gitignore matches the link itself)
 .claude/skills
 .cursor/skills
+
+node_modules/
+.env
