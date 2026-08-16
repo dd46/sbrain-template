@@ -10,6 +10,7 @@ Jedna sesja chatu = folder `docs/conversations/YYYY-MM-DD-<slug>/`:
 2026-08-16-sm-meteorologia/
   high-level.md    # plan, notatki, quizy
   history.md       # transkrypt: Ty + Agent (każda wiadomość)
+  sync.md          # synced: false → true po „synchronizuj”; dziennik wpływu na KB
   attachments/     # opcjonalnie — załączniki z chatu
 ```
 
@@ -104,3 +105,34 @@ npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi/high-level.md
 ```
 
 Potem `npm run sync` (tylko pliki poza `conversations/`).
+
+
+## Szablon — sync.md
+
+```markdown
+---
+synced: false
+synced_at: null
+---
+
+# Sync z KB
+
+Sesja **nie została jeszcze zsynchronizowana** ze strukturalną bazą.
+
+Powiedz **synchronizuj** gdy chcesz zapisać wpływ tej rozmowy na KB.
+
+## Dziennik
+
+(brak — uzupełniane przy synchronizuj)
+```
+
+Po **synchronizuj**: `synced: true`, `synced_at`, wpisy w dzienniku (notatki/H2, wynik quizu, podsumowanie `npm run sync`).
+
+## Synchronizuj — procedura agenta
+
+1. Oceń odpowiedzi quizów w `high-level.md`.
+2. Ustaw `quiz_confirmed` / `quiz_confirmed_at` w YAML `sections` notatek z `track_quiz: true`.
+3. Zaktualizuj `sync.md` (flaga + dziennik).
+4. `npm run sync` jeśli zmieniłeś strukturalne `docs/`.
+
+Strukturalne `docs/` **nie** zmieniaj bez prośby użytkownika ani bez jawnego synchronizuj.

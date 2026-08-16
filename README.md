@@ -26,11 +26,12 @@ Open the Neo4j Browser at [http://localhost:7474](http://localhost:7474) — sig
 
 ### Cursor MCP
 
-This repo includes `.cursor/mcp.json`. Reload the Cursor window (or restart MCP) so the **sbrain** server appears with four tools:
+This repo includes `.cursor/mcp.json`. Reload the Cursor window (or restart MCP) so the **sbrain** server appears with five tools:
 
 - `search_by_namespace`
 - `get_document_graph`
 - `get_recommendations`
+- `semantic_search`
 - `trigger_sync`
 
 Neo4j must be running and the catalog synced before tools return useful results.
@@ -39,7 +40,7 @@ Neo4j must be running and the catalog synced before tools return useful results.
 
 | Command | Purpose |
 | ------- | ------- |
-| `npm run sync` | Parse `docs/` and wipe-reload the graph in Neo4j |
+| `npm run sync` | Parse `docs/`, embed bodies locally (Xenova), wipe-reload Neo4j |
 | `npm run mcp` | Start the MCP server on STDIO (Cursor does this automatically) |
 | `npm test` | Parser unit tests (no Docker) |
 | `npm run test:integration` | Graph + tool tests (requires Neo4j up) |

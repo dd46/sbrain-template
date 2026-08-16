@@ -55,6 +55,13 @@ status: "draft | consumed | mastered"
 summary: "1-2 sentence summary."
 tags: ["tag1", "tag2"]
 prerequisites: ["Requirement 1"]
+# Optional — quiz confirmation per H2 section:
+# track_quiz: true
+# sections:
+#   - id: topic-slug
+#     heading: "Topic heading"
+#     quiz_confirmed: false
+#     quiz_confirmed_at: null
 ---
 # Actual content...
 ---
@@ -143,7 +150,9 @@ The MCP server (`server.js`) should be written in Node.js (with `@modelcontextpr
 
 `trigger_sync()` - runs the sync script.
 
-NEW: `get_recommendations(namespace_id: string)` - fetches from Neo4j a list of intents and their assigned resources (links) for the given namespace.
+NEW: `semantic_search(namespace_id, query, include_children, top_k)` - cosine similarity over stored document/section embeddings (local Xenova model at sync).
+
+`get_recommendations(namespace_id: string)` - fetches from Neo4j a list of intents and their assigned resources (links) for the given namespace.
 
 ## 7. Startup Instructions for Cursor (First Deployment)
 Initialize a Node.js project (`npm init -y`) and install packages (`npm install neo4j-driver @modelcontextprotocol/sdk gray-matter zod`).

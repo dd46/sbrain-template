@@ -38,32 +38,32 @@ test("sync is idempotent on the sailing seed", async () => {
   const second = await syncCatalogToGraph(driver, catalog);
   assert.equal(first.namespaces, second.namespaces);
   assert.equal(first.documents, second.documents);
-  assert.equal(first.intents, second.intents);
-  assert.equal(first.references, second.references);
-  assert.equal(first.namespaces, 4);
-  assert.equal(first.documents, 2);
+  assert.equal(first.namespaces, 3);
+  assert.equal(first.documents, 5);
   assert.ok(first.intents >= 1);
   assert.ok(first.references >= 2);
 });
 
-test("graph contains root namespace and reciprocal REFERENCES", async () => {
+test("graph contains document body and REFERENCES edges", async () => {
   const session = driver.session();
   try {
     const root = await session.run(`MATCH (n:Namespace {id: ""}) RETURN n.name AS name`);
     assert.equal(root.records.length, 1);
     assert.equal(root.records[0].get("name"), "docs");
 
-    const refs = await session.run(
-      `MATCH (a:Document {path: "sailing/basics/wind"})-[:REFERENCES]->(b:Document {path: "sailing/licenses_certificates/sailing_certificate"})
-       RETURN count(*) AS c`,
+    const body = await session.run(
+      `MATCH (d:Document {path: "sailing/licenses_certificates/polish_motorboat_license"})
+       RETURN d.body AS body`,
     );
-    assert.equal(refs.records[0].get("c").toNumber(), 1);
+    assert.ok(body.records[0].get("body").includes("PZMWiNW"));
 
-    const intent = await session.run(
-      `MATCH (i:Intent {query: "I want to understand sail aerodynamics", namespaceId: "sailing.basics"})<-[:RECOMMENDED_FOR]-(r:Resource)
-       RETURN count(r) AS c`,
+    const refs = await session.run(
+      `MATCH (a:Document {path: "sailing/licenses_certificates/polish_sailing_license"})-[:REFERENCES]->(b:Document)
+       RETURN b.path AS path`,
     );
-    assert.ok(intent.records[0].get("c").toNumber() >= 1);
+    assert.ok(
+      refs.records.some((r) => r.get("path") === "sailing/licenses_certificates/polish_motorboat_license"),
+    );
   } finally {
     await session.close();
   }

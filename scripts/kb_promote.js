@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 /**
- * Promote a conversation session into a structured KB note (spec.md frontmatter).
- *
- * Usage:
- *   node scripts/kb_promote.js <session-folder-or-high-level.md> <target-path-without-.md>
- *
- * Example:
- *   npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi/high-level.md sailing/licenses_certificates/sm_prawo_drogi
- *   npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi sailing/licenses_certificates/sm_prawo_drogi
+ * Promote learning sections from a conversation session into a structured KB note.
+ * Does not update sync.md — use explicit "synchronizuj" in chat for that.
  */
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { fileURLToPath } from "node:url";
+import { slugifyHeading } from "../lib/parse-catalog.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const docsRoot = path.join(repoRoot, "docs");
+
+const SKIP_HEADING = /^(Plan sesji|Format folderu|Quiz\b)/i;
+
+function shouldPromoteSection(heading) {
+  return !SKIP_HEADING.test(heading.trim());
+}
 
 const [conversationArg, targetArg] = process.argv.slice(2);
 
@@ -36,7 +37,6 @@ if (!normalizedInput.includes("/docs/conversations/")) {
   process.exit(1);
 }
 
-/** Resolve session folder or legacy .md to high-level.md path. */
 function resolveHighLevelPath(p) {
   const norm = p.replace(/\\/g, "/");
   if (norm.endsWith("/high-level.md")) {
@@ -70,7 +70,6 @@ const { data: fm, content } = matter(raw);
 
 const sections = [];
 const lines = content.split("\n");
-/** @type {{ heading: string, body: string[] } | null} */
 let current = null;
 
 for (const line of lines) {
@@ -90,20 +89,36 @@ if (current) {
   sections.push(current);
 }
 
-if (sections.length === 0) {
-  process.stderr.write("No ## sections found in conversation file\n");
+const learningSections = sections.filter((s) => shouldPromoteSection(s.heading));
+
+if (learningSections.length === 0) {
+  process.stderr.write("No promotable ## sections found (skipped Plan/Quiz/meta sections)\n");
   process.exit(1);
 }
 
 const title =
   typeof fm.title === "string" && fm.title.trim()
     ? fm.title.trim()
-    : sections[0].heading;
+    : learningSections[0].heading;
 
-const bodyParts = sections.map((s) => {
+const bodyParts = learningSections.map((s) => {
   const text = s.body.join("\n").trim();
   return `## ${s.heading}\n\n${text}`;
 });
+
+const sectionMeta = learningSections.map((s) => ({
+  id: slugifyHeading(s.heading),
+  heading: s.heading,
+  quiz_confirmed: false,
+  quiz_confirmed_at: null,
+}));
+
+const sectionsYaml = sectionMeta
+  .map(
+    (s) =>
+      `  - id: ${s.id}\n    heading: "${s.heading.replace(/"/g, '\\"')}"\n    quiz_confirmed: false\n    quiz_confirmed_at: null`,
+  )
+  .join("\n");
 
 const promoted = `---
 title: "${title.replace(/"/g, '\\"')}"
@@ -113,6 +128,9 @@ status: "consumed"
 summary: "Promoted from ${sessionFolderName}/high-level.md on ${new Date().toISOString().slice(0, 10)}."
 tags: []
 prerequisites: []
+track_quiz: true
+sections:
+${sectionsYaml}
 ---
 # ${title}
 
@@ -134,8 +152,9 @@ process.stdout.write(
       ok: true,
       from: path.relative(repoRoot, conversationPath),
       to: path.relative(repoRoot, targetPath),
-      sections: sections.length,
-      next: "npm run sync",
+      sections: learningSections.length,
+      track_quiz: true,
+      next: "Say synchronizuj in chat to update sync.md and run npm run sync",
     },
     null,
     2,

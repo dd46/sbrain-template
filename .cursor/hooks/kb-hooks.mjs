@@ -14,9 +14,9 @@ const STATE_DIR = join(__dirname, "state");
 const STATE_PATH = join(STATE_DIR, "kb-session.json");
 
 const PERSIST_CONTEXT = [
-  "Second Brain policy: session folder docs/conversations/YYYY-MM-DD-slug/ with high-level.md (plan+notes), history.md (Ty/Agent transcript), optional attachments/.",
+  "Second Brain policy: session folder docs/conversations/YYYY-MM-DD-slug/ with high-level.md, history.md, sync.md (synced:false until synchronizuj), optional attachments/.",
   "Empty chat history → create NEW session folder. Ongoing chat → append only to that folder.",
-  "Keep chat replies short — one topic at a time. Cite facts with [n] refs + Źródła legend (KB/web/model). Structured docs/ only when user asks or npm run kb:promote.",
+  "Keep chat replies short — one topic at a time. Cite facts with [n] refs + Źródła legend (KB/web/model). Structured docs/ only when user asks; synchronizuj logs sync.md and runs npm run sync.",
   "Run npm run sync after structured docs/ edits (not for conversations/). Commit when done. Never push unless asked.",
   "See AGENTS.md and .cursor/rules/kb-persist.mdc.",
 ].join(" ");

@@ -7,6 +7,7 @@ import {
   getDocumentGraph,
   getRecommendations,
   searchByNamespace,
+  semanticSearch,
   textResult,
   triggerSync,
 } from "../lib/kb-tools.js";
@@ -75,6 +76,43 @@ server.registerTool(
   async ({ namespace_id }) => {
     const data = await getRecommendations(driver, { namespace_id });
     return textResult(data);
+  },
+);
+
+
+server.registerTool(
+  "semantic_search",
+  {
+    description:
+      "Semantic (vector) search over document and section bodies in Neo4j.",
+    inputSchema: {
+      namespace_id: z
+        .string()
+        .describe('Dotted namespace id; empty string is the docs/ root'),
+      query: z.string().describe("Natural-language search query"),
+      include_children: z
+        .boolean()
+        .optional()
+        .default(true)
+        .describe("Include documents in child namespaces"),
+      top_k: z
+        .number()
+        .int()
+        .min(1)
+        .max(20)
+        .optional()
+        .default(5)
+        .describe("Maximum results to return"),
+    },
+  },
+  async ({ namespace_id, query, include_children, top_k }) => {
+    const results = await semanticSearch(driver, {
+      namespace_id,
+      query,
+      include_children,
+      top_k,
+    });
+    return textResult(results);
   },
 );
 

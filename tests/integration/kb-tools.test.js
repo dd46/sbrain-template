@@ -9,6 +9,7 @@ import {
   getDocumentGraph,
   getRecommendations,
   searchByNamespace,
+  semanticSearch,
   triggerSync,
 } from "../../lib/kb-tools.js";
 
@@ -37,38 +38,45 @@ after(async () => {
   }
 });
 
-test("search_by_namespace from root finds wind", async () => {
+test("search_by_namespace finds motorboat license by body text", async () => {
   const results = await searchByNamespace(driver, {
-    namespace_id: "",
-    query: "wind",
-    include_children: true,
+    namespace_id: "sailing.licenses_certificates",
+    query: "sternik motorowodny",
+    include_children: false,
   });
-  assert.ok(results.some((r) => r.path === "sailing/basics/wind"));
+  assert.ok(
+    results.some((r) => r.path === "sailing/licenses_certificates/polish_motorboat_license"),
+  );
 });
 
-test("get_document_graph includes certificate reference", async () => {
+test("get_document_graph includes body on document", async () => {
   const graph = await getDocumentGraph(driver, {
-    file_path: "sailing/basics/wind.md",
+    file_path: "sailing/licenses_certificates/polish_motorboat_license",
   });
   assert.equal(graph.found, true);
-  assert.ok(
-    graph.references_out.includes("sailing/licenses_certificates/sailing_certificate"),
-  );
+  assert.ok(graph.document.body?.includes("PZMWiNW"));
+  assert.equal(graph.sections.length, 0);
 });
 
-test("get_recommendations returns sailing.basics intents", async () => {
-  const data = await getRecommendations(driver, { namespace_id: "sailing.basics" });
+test("get_recommendations returns licenses_certificates intents", async () => {
+  const data = await getRecommendations(driver, { namespace_id: "sailing.licenses_certificates" });
+  assert.ok(data.intents.some((i) => i.query.includes("SM exam")));
+});
+
+test("semantic_search returns motorboat license for age query", async () => {
+  const data = await semanticSearch(driver, {
+    namespace_id: "sailing.licenses_certificates",
+    query: "minimum age for motorboat license Poland",
+    include_children: false,
+    top_k: 3,
+  });
   assert.ok(
-    data.intents.some((i) => i.query === "I want to understand sail aerodynamics"),
+    data.results.some((r) => r.path === "sailing/licenses_certificates/polish_motorboat_license"),
   );
-  const aerodynamics = data.intents.find(
-    (i) => i.query === "I want to understand sail aerodynamics",
-  );
-  assert.ok(aerodynamics.resources.length > 0);
 });
 
 test("trigger_sync reloads the catalog", async () => {
   const summary = await triggerSync();
   assert.equal(summary.ok, true);
-  assert.equal(summary.documents, 2);
+  assert.equal(summary.documents, 5);
 });

@@ -119,3 +119,67 @@ session: "2026-01-01"
   assert.equal(catalog.documents.some((d) => d.path.startsWith("conversations/")), false);
   fs.rmSync(tmp, { recursive: true, force: true });
 });
+
+test("document body excludes References block", () => {
+  const catalog = parseCatalog(seedDocs);
+  const note = catalog.documents.find(
+    (d) => d.path === "sailing/licenses_certificates/polish_motorboat_license",
+  );
+  assert.ok(note);
+  assert.ok(note.body.includes("patent sternika motorowodnego"));
+  assert.equal(note.body.includes("## References"), false);
+});
+
+test("track_quiz note yields H2 sections with quiz metadata", () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "sbrain-quiz-"));
+  const noteDir = path.join(tmp, "alpha");
+  fs.mkdirSync(noteDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(noteDir, "note.md"),
+    `---
+title: "Quiz note"
+namespace: "alpha"
+type: "manual"
+status: "draft"
+summary: "Test."
+tags: []
+prerequisites: []
+track_quiz: true
+sections:
+  - id: topic-a
+    heading: "Topic A"
+    quiz_confirmed: true
+    quiz_confirmed_at: "2026-08-16"
+---
+# Quiz note
+
+## Topic A
+
+Body A.
+
+## Topic B
+
+Body B.
+
+---
+## References
+### Internal
+### External
+`,
+    "utf8",
+  );
+
+  const catalog = parseCatalog(tmp);
+  assert.equal(catalog.errors.length, 0, catalog.errors.join("; "));
+  const note = catalog.documents[0];
+  assert.equal(note.trackQuiz, true);
+  assert.equal(note.sections.length, 2);
+  const a = note.sections.find((s) => s.id === "topic-a");
+  assert.ok(a);
+  assert.equal(a.quiz_confirmed, true);
+  assert.equal(a.quiz_confirmed_at, "2026-08-16");
+  const b = note.sections.find((s) => s.id === "topic-b");
+  assert.ok(b);
+  assert.equal(b.quiz_confirmed, false);
+  fs.rmSync(tmp, { recursive: true, force: true });
+});
