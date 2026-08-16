@@ -20,7 +20,7 @@ topic: "sailing.licenses_certificates / SM temat 1"
 ## Quiz
 
 - [ ] Quiz: trzy sytuacje spotkań
-- [ ] Quiz: definicje statków
+- [x] Quiz: definicje statków
 - [ ] Quiz: prawy brzeg, góra/dół
 - [ ] Quiz: hierarchia pierwszeństwa
 - [ ] Quiz: znaki B/E
@@ -94,15 +94,11 @@ Klasyfikacja statku decyduje o **hierarchii pierwszeństwa** — musisz wiedzie�
 
 —
 
-## Quiz — definicje statków
-
-1. Jacht żaglowy płynie z żaglami i włączonym silnikiem. Jak go klasyfikujesz?
-2. Kiedy statek jest „w drodze”?
-3. Dwie motorówki widzą się tylko na radarze, nie gołym okiem. Czy obowiązują reguły spotkań?
-
 ### Odpowiedzi
 
-—
+1. jacht motorowy → **prawie:** silnik = napęd mechaniczny. Na egzaminie szukaj: **statek o napędzie mechanicznym** (nie „jacht motorowy” — to osobna kategoria: jacht z silnikiem jako głównym napędem).
+2. kiedy nie ma kotwicy, nie jest przycumowany ani na mieliźnie → **OK**
+3. nie, bo się nie widzą → **OK** (brak „wzajemnej widoczności” = reguły spotkań nie obowiązują)
 
 ## Plan z quizami
 
