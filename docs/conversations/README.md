@@ -6,6 +6,7 @@ Historia sesji z chatem — **osobno od strukturalnej bazy** (`docs/sailing/`, �
 - **Nie trafia do Neo4j** (parser pomija `docs/conversations/`).
 - **Krótkie wiadomości:** jedno zagadnienie na `##` heading.
 - Na górze **plan sesji** z checkboxami — co agent ma jeszcze powiedzieć/zrobić.
+- Przy każdym zagadnieniu w planie **zostaw punkt quizu** (`Quiz: …`) — po nauce krótkie pytania sprawdzające wiedzę.
 
 ## Szablon
 
@@ -18,8 +19,13 @@ topic: "namespace lub temat"
 
 # Plan sesji
 
+## Nauka
 - [x] już omówione
-- [ ] następna wiadomość
+- [ ] następne zagadnienie
+
+## Quiz
+- [ ] Quiz: już omówione
+- [ ] Quiz: następne zagadnienie
 
 ## 1 — Jedno zagadnienie
 
@@ -28,6 +34,15 @@ Treść jednej wiadomości agenta.
 ### Odpowiedzi
 
 (twoje odpowiedzi albo „—”)
+
+## Quiz — jedno zagadnienie
+
+1. Pytanie?
+2. Pytanie?
+
+### Odpowiedzi
+
+(twoje odpowiedzi; poprawne oznacz `[x]` w planie)
 
 ## 2 — Kolejne zagadnienie
 
