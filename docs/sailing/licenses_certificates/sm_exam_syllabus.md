@@ -28,6 +28,8 @@ Question pool: PZMWiNW maintains **700+ questions** across categories — exam d
 
 The largest block. Highest error rate in practice.
 
+**Study:** [[sailing/licenses_certificates/sm_prawo_drogi_lekcja1]] (lekcja 1 — podstawy; status: w trakcie)
+
 - Right-of-way on inland and coastal waters
 - Meeting, overtaking, crossing situations
 - Speed limits, restricted zones, MPZZM rules
@@ -145,6 +147,7 @@ Patent application at [motorowodniacy.org](https://www.motorowodniacy.org/patent
 ---
 ## References
 ### Internal
+- [[sailing/licenses_certificates/sm_prawo_drogi_lekcja1]]
 - [[sailing/licenses_certificates/polish_motorboat_license]]
 - [[sailing/licenses_certificates/operating_without_license]]
 - [[sailing/licenses_certificates/sailing_certificate]]

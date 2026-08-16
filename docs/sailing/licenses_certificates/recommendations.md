@@ -2,6 +2,10 @@
 type: "recommendations"
 namespace: "sailing.licenses_certificates"
 ---
+# I want to pass the SM exam (prawo drogi)
+- [Przepisy żeglugowe — PDF PZMWiNW](https://motorowodniak.com/materialy/nauka/SM_przepisy_2014.pdf)
+- [Baza pytań egzaminacyjnych SM](https://akademiasternika.pl/blog/pytania-egzaminacyjne-sternik-baza)
+
 # I want to know which certificate I need (Poland)
 - [PZŻ — patenty żeglarskie](https://pya.org.pl)
 - [PZMWiNW — patenty motorowodne](https://www.motorowodniacy.org/patenty.html)
