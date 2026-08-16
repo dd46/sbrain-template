@@ -10,7 +10,7 @@ topic: "sailing.licenses_certificates / SM temat 1"
 
 - [x] Start: temat 1 z [[sailing/licenses_certificates/sm_exam_syllabus]]
 - [x] Trzy sytuacje spotkań (mijanie / wyprzedzanie / skrzyżowanie)
-- [ ] Definicje statków (pułapka: żaglówka + silnik)
+- [x] Definicje statków (pułapka: żaglówka + silnik)
 - [ ] Prawy brzeg, góra i dół rzeki
 - [ ] Hierarchia pierwszeństwa (duża prędkość, małe statki)
 - [ ] Znaki B/E przy skrzyżowaniach dróg wodnych
@@ -66,6 +66,39 @@ Na wodzie prawie wszystko to jedna z trzech sytuacji:
 **Ty:** wiadomości krótsze, jedno zagadnienie; wiedza = historia sesji w `docs/conversations/`; strukturalne `docs/` tylko ad-hoc (`npm run kb:promote`).
 
 **Agent:** od teraz tak pracujemy. Sesja w tym pliku; notatka `sm_prawo_drogi_lekcja1` usunięta z KB.
+
+### Odpowiedzi
+
+—
+
+## Definicje statków
+
+Klasyfikacja statku decyduje o **hierarchii pierwszeństwa** — musisz wiedzieć, czym jest dana jednostka, zanim zastosujesz reguły mijania / wyprzedzania / skrzyżowania.
+
+### Napęd — najważniejsza pułapka egzaminacyjna
+
+| Klasyfikacja | Kiedy |
+|--------------|-------|
+| **Statek o napędzie mechanicznym** | Porusza się **przy użyciu silnika** — niezależnie od tego, czy ma podniesione żagle |
+| **Statek żaglowy** | Płynie **tylko pod żaglami**, **nie używa** napędu mechanicznego |
+
+**Pułapka:** jacht żaglowy z włączonym silnikiem (nawet z żaglami) = **statek o napędzie mechanicznym**, nie żaglowy. Pytanie #44 w bazach: odpowiedź to zawsze „statek o napędzie mechanicznym”.
+
+### Inne definicje, które padają na teście
+
+- **Statek „w drodze”** — nie stoi na kotwicy, nie jest przymocowany do lądu, nie stoi na mieliźnie.
+- **Wzajemnie widoczne** — oba statki można obserwować wzrokowo (reguły spotkań obowiązują tylko wtedy).
+- **Jacht motorowy** — jacht, którego **głównym** napędem jest silnik (sport/turystyka). Małe jednostki często błędnie nazywa się „motorówkami”; w przepisach liczy się klasyfikacja prawna, nie potoczna nazwa.
+
+### Odpowiedzi
+
+—
+
+## Quiz — definicje statków
+
+1. Jacht żaglowy płynie z żaglami i włączonym silnikiem. Jak go klasyfikujesz?
+2. Kiedy statek jest „w drodze”?
+3. Dwie motorówki widzą się tylko na radarze, nie gołym okiem. Czy obowiązują reguły spotkań?
 
 ### Odpowiedzi
 
