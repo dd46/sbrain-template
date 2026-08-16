@@ -1,0 +1,157 @@
+#!/usr/bin/env node
+/**
+ * Second Brain KB persistence hooks.
+ * sessionStart — reset session state, inject persist policy
+ * track        — postToolUse: flag web research and docs/ writes
+ * stop         — auto-follow-up when web was used but docs/ was not updated
+ */
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const STATE_DIR = join(__dirname, "state");
+const STATE_PATH = join(STATE_DIR, "kb-session.json");
+
+const PERSIST_CONTEXT = [
+  "Second Brain policy: every factual answer must be persisted to docs/ in the same turn.",
+  "Search docs/ or sbrain MCP first. After providing new information, create or update .md notes per spec.md.",
+  "Run npm run sync yourself after docs/ edits (docker-compose up -d if Neo4j is down).",
+  "Commit all file changes when the turn is done. Never push unless the user explicitly asks.",
+  "Do not ask permission to save. Set status consumed when the user learned it in chat.",
+  "See AGENTS.md and .cursor/rules/kb-persist.mdc.",
+].join(" ");
+
+function defaultState() {
+  return {
+    external_knowledge_used: false,
+    docs_written: false,
+    sync_ran: false,
+    committed: false,
+  };
+}
+
+function readState() {
+  try {
+    return { ...defaultState(), ...JSON.parse(readFileSync(STATE_PATH, "utf8")) };
+  } catch {
+    return defaultState();
+  }
+}
+
+function writeState(state) {
+  mkdirSync(STATE_DIR, { recursive: true });
+  writeFileSync(STATE_PATH, JSON.stringify(state, null, 2));
+}
+
+function readHookInput() {
+  const text = readFileSync(0, "utf8");
+  return text ? JSON.parse(text) : {};
+}
+
+function isDocsPath(path) {
+  if (!path || typeof path !== "string") return false;
+  const normalized = path.replace(/\\/g, "/");
+  return (
+    normalized.includes("/docs/") ||
+    normalized.startsWith("docs/") ||
+    normalized.endsWith("/docs")
+  );
+}
+
+function extractEditedPath(toolName, toolInput) {
+  if (!toolInput || typeof toolInput !== "object") return "";
+  return toolInput.path ?? toolInput.file_path ?? toolInput.target_file ?? "";
+}
+
+function sessionStart() {
+  writeState(defaultState());
+  process.stdout.write(
+    JSON.stringify({
+      env: { SBRAIN_KB_PERSIST: "required" },
+      additional_context: PERSIST_CONTEXT,
+    }) + "\n",
+  );
+}
+
+function track() {
+  const input = readHookInput();
+  const state = readState();
+  const toolName = input.tool_name ?? "";
+
+  if (toolName === "WebSearch" || toolName === "WebFetch") {
+    state.external_knowledge_used = true;
+  }
+
+  if (toolName === "Write" || toolName === "StrReplace") {
+    const path = extractEditedPath(toolName, input.tool_input);
+    if (isDocsPath(path)) {
+      state.docs_written = true;
+    }
+  }
+
+  if (toolName === "Shell") {
+    const command = input.tool_input?.command ?? "";
+    if (command.includes("npm run sync")) {
+      state.sync_ran = true;
+    }
+    if (/\bgit commit\b/.test(command)) {
+      state.committed = true;
+    }
+  }
+
+  writeState(state);
+  process.stdout.write("{}\n");
+}
+
+function stop() {
+  const input = readHookInput();
+  const state = readState();
+
+  if (input.status !== "completed") {
+    process.stdout.write("{}\n");
+    return;
+  }
+
+  const missing = [];
+
+  if (state.external_knowledge_used && !state.docs_written) {
+    missing.push("zapisz wyniki do docs/");
+  }
+
+  if (state.docs_written && !state.sync_ran) {
+    missing.push("uruchom npm run sync");
+  }
+
+  if (state.docs_written && !state.committed) {
+    missing.push("zrób git commit (bez push)");
+  }
+
+  if (missing.length === 0) {
+    process.stdout.write("{}\n");
+    return;
+  }
+
+  process.stdout.write(
+    JSON.stringify({
+      followup_message: `Nie dokończyłeś workflow KB: ${missing.join(", ")}. Zgodnie z AGENTS.md i kb-persist.mdc.`,
+    }) + "\n",
+  );
+}
+
+const command = process.argv[2];
+switch (command) {
+  case "sessionStart":
+    sessionStart();
+    break;
+  case "track":
+    track();
+    break;
+  case "stop":
+    stop();
+    break;
+  default:
+    console.error(`Unknown kb-hooks command: ${command}`);
+    process.stdout.write("{}\n");
+    process.exit(1);
+}

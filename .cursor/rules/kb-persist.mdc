@@ -1,0 +1,29 @@
+---
+description: Persist all new factual knowledge to docs/ KB — mandatory, not optional
+alwaysApply: true
+---
+
+# KB persistence (mandatory)
+
+This repo is a **Second Brain**. The user's knowledge lives in `docs/`, not in chat history.
+
+## When answering
+
+1. **Search `docs/` first** (read files or MCP `sbrain` tools) before web search or model recall.
+2. **Every new fact, guide, or explanation you provide must be written to `docs/`** in the same turn — create or update `.md` notes. Do not only answer in chat.
+3. **Do not ask permission** to save ("chcesz żebym dodał notatkę?"). Just write the file and mention what you created.
+4. Follow @spec.md frontmatter: `title`, `namespace`, `type`, `status`, `summary`, `tags`, wiki-links, `## References`.
+5. Set `status: consumed` when the user learned it in conversation; `mastered` when they demonstrably know it; `draft` for exploratory stubs.
+6. Place notes in the correct namespace folder (e.g. `docs/sailing/licenses_certificates/`).
+7. Update related notes and `recommendations.md` when adding external links.
+8. After editing `docs/`, **run `npm run sync` yourself** in the same turn. Start Neo4j first if needed (`docker-compose up -d`). Do not ask the user to sync.
+9. **Commit** all repo changes when the turn produced file edits (docs, hooks, app code). Use concise imperative messages. **Never push** unless the user explicitly asks.
+
+## Exemptions
+
+- Pure app-development work (`lib/`, `mcp_server/`, `scripts/`, `tests/`, `context/changes/`) — no KB write required unless the change itself is documentation.
+- Trivial one-line replies with no new information ("ok", "done", clarifying questions).
+
+## If KB already has the answer
+
+Read and cite existing notes. Update them only when your answer adds or corrects information.

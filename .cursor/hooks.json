@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "node .cursor/hooks/kb-hooks.mjs sessionStart"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "node .cursor/hooks/kb-hooks.mjs track",
+        "matcher": "WebSearch|WebFetch|Write|StrReplace|Shell"
+      }
+    ],
+    "stop": [
+      {
+        "command": "node .cursor/hooks/kb-hooks.mjs stop",
+        "loop_limit": 2
+      }
+    ]
+  }
+}
