@@ -3,10 +3,11 @@
  * Promote a conversation session into a structured KB note (spec.md frontmatter).
  *
  * Usage:
- *   node scripts/kb_promote.js <conversation.md> <target-path-without-.md>
+ *   node scripts/kb_promote.js <session-folder-or-high-level.md> <target-path-without-.md>
  *
  * Example:
- *   npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi.md sailing/licenses_certificates/sm_prawo_drogi
+ *   npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi/high-level.md sailing/licenses_certificates/sm_prawo_drogi
+ *   npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi sailing/licenses_certificates/sm_prawo_drogi
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -20,19 +21,35 @@ const [conversationArg, targetArg] = process.argv.slice(2);
 
 if (!conversationArg || !targetArg) {
   process.stderr.write(
-    "Usage: kb_promote.js <docs/conversations/file.md> <target/path/without-md>\n",
+    "Usage: kb_promote.js <docs/conversations/session-or-high-level.md> <target/path/without-md>\n",
   );
   process.exit(1);
 }
 
-const conversationPath = path.isAbsolute(conversationArg)
+const inputPath = path.isAbsolute(conversationArg)
   ? conversationArg
   : path.join(repoRoot, conversationArg);
 
-if (!conversationPath.replace(/\\/g, "/").includes("/docs/conversations/")) {
+const normalizedInput = inputPath.replace(/\\/g, "/");
+if (!normalizedInput.includes("/docs/conversations/")) {
   process.stderr.write("Source must live under docs/conversations/\n");
   process.exit(1);
 }
+
+/** Resolve session folder or legacy .md to high-level.md path. */
+function resolveHighLevelPath(p) {
+  const norm = p.replace(/\\/g, "/");
+  if (norm.endsWith("/high-level.md")) {
+    return p;
+  }
+  if (norm.endsWith(".md") && !norm.endsWith("/high-level.md")) {
+    return p;
+  }
+  return path.join(p, "high-level.md");
+}
+
+const conversationPath = resolveHighLevelPath(inputPath);
+const sessionFolderName = path.basename(path.dirname(conversationPath));
 
 const targetRel = targetArg.replace(/\.md$/, "").replace(/^docs\//, "");
 const targetPath = path.join(docsRoot, `${targetRel}.md`);
@@ -93,7 +110,7 @@ title: "${title.replace(/"/g, '\\"')}"
 namespace: "${namespaceId}"
 type: "manual"
 status: "consumed"
-summary: "Promoted from ${path.basename(conversationPath)} on ${new Date().toISOString().slice(0, 10)}."
+summary: "Promoted from ${sessionFolderName}/high-level.md on ${new Date().toISOString().slice(0, 10)}."
 tags: []
 prerequisites: []
 ---
@@ -104,7 +121,7 @@ ${bodyParts.join("\n\n")}
 ---
 ## References
 ### Internal
-- [[${path.basename(conversationPath, ".md")}]]
+- [[conversations/${sessionFolderName}/high-level]]
 ### External
 `;
 

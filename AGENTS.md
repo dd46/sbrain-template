@@ -10,9 +10,10 @@ When the user asks about **anything other than building or changing this Second 
 2. **Respect note metadata.** `status` (`draft` | `consumed` | `mastered`), `summary`, `tags`, and `prerequisites` reflect what the user already knows or is learning. Align answers with that level.
 3. **Follow the graph.** Use `get_document_graph` and wiki-links (`[[sailing/basics/wind]]`) to pull related notes before answering.
 4. **Check recommendations.** `recommendations.md` at each namespace level lists intents the user wanted to explore — use them when the question is exploratory.
-5. **Persist every answer.** Write to **`docs/conversations/`** (session history: plan with **Nauka + Quiz**, one `##` heading per message). Structured notes — **only when you ask** or via `npm run kb:promote`.
-6. **Sync and commit yourself.** Run `npm run sync` only after structured `docs/` edits. Commit when the turn changed files. **Do not push** unless you explicitly ask.
-7. **Hooks enforce this.** @.cursor/rules/kb-persist.mdc applies to every session. @.cursor/hooks.json runs `sessionStart` (inject policy) and `stop` (auto-follow-up if web research was used without a `docs/` write).
+5. **Persist every answer.** Write to **`docs/conversations/<session>/`** — `high-level.md` (plan + notes), `history.md` (Ty/Agent transcript), optional `attachments/`. **Empty chat history → new session folder**; ongoing chat → append to that folder only. Promote from `high-level.md` via `npm run kb:promote`.
+6. **Cite in chat.** Numbered refs `[n]` at facts + `### Źródła` legend (`KB` / `web` / `model`). See `docs/conversations/README.md`.
+7. **Sync and commit yourself.** Run `npm run sync` only after structured `docs/` edits. Commit when the turn changed files. **Do not push** unless you explicitly ask.
+8. **Hooks enforce this.** @.cursor/rules/kb-persist.mdc applies to every session. @.cursor/hooks.json runs `sessionStart` (inject policy) and `stop` (auto-follow-up if web research was used without a `docs/` write).
 
 App-development prompts (MCP server, sync, tests, infra, `context/changes/`) follow the repo sections below instead.
 

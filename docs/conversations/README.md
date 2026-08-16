@@ -2,13 +2,42 @@
 
 Historia sesji z chatem — **osobno od strukturalnej bazy** (`docs/sailing/`, …).
 
-- **Jeden plik = jedna sesja** (np. `2026-08-16-sm-prawo-drogi.md`).
-- **Nie trafia do Neo4j** (parser pomija `docs/conversations/`).
-- **Krótkie wiadomości:** jedno zagadnienie na `##` heading.
-- Na górze **plan sesji** z checkboxami — co agent ma jeszcze powiedzieć/zrobić.
-- Przy każdym zagadnieniu w planie **zostaw punkt quizu** (`Quiz: …`) — po nauce krótkie pytania sprawdzające wiedzę.
+## Struktura folderu sesji
 
-## Szablon
+Jedna sesja chatu = folder `docs/conversations/YYYY-MM-DD-<slug>/`:
+
+```
+2026-08-16-sm-meteorologia/
+  high-level.md    # plan, notatki, quizy
+  history.md       # transkrypt: Ty + Agent (każda wiadomość)
+  attachments/     # opcjonalnie — załączniki z chatu
+```
+
+- **Pusta historia czatu** (nowy chat) → **nowy folder** sesji z `high-level.md` i `history.md`.
+- **Ten sam chat** → dopisuj do plików **tego** folderu.
+- **Nie trafia do Neo4j** (parser pomija `docs/conversations/`).
+- **Krótkie wiadomości w chat:** jedno zagadnienie; w `high-level.md` jeden `##` na temat.
+- Na górze `high-level.md` **plan sesji** z checkboxami (`## Nauka`, `## Quiz`).
+- W `history.md` każda wiadomość: `## N` → `### Ty` / `### Agent`.
+
+## Format odpowiedzi (nauka / KB)
+
+Każda wiadomość z treścią merytoryczną:
+
+1. **Referencje numerowane** przy zdaniach/faktach: `[1]`, `[2]` … (wiele źródeł: `[1][3]`).
+2. **Legenda na dole** — sekcja `### Źródła` z tabelą: `# | Typ | Źródło`.
+3. **Typy:** `KB` (wiki-link w `docs/`), `web` (URL), `model` (wniosek bez dosłownego cytatu).
+4. Quizy bez referencji — to pytania do użytkownika.
+
+Przykład legendy:
+
+| # | Typ | Źródło |
+|---|-----|--------|
+| [1] | KB | [[sailing/licenses_certificates/sm_exam_syllabus]] — temat 7 |
+| [2] | web | [IMGW — antycyklony](https://obserwator.imgw.pl/…) |
+| [3] | model | Wniosek praktyczny / pułapka egzaminacyjna |
+
+## Szablon — high-level.md
 
 ```markdown
 ---
@@ -27,34 +56,51 @@ topic: "namespace lub temat"
 - [ ] Quiz: już omówione
 - [ ] Quiz: następne zagadnienie
 
-## 1 — Jedno zagadnienie
+## Jedno zagadnienie
 
-Treść jednej wiadomości agenta.
+Treść notatki (bez pełnego transkryptu chatu).
 
 ### Odpowiedzi
 
-(twoje odpowiedzi albo „—”)
+(twoje odpowiedzi albo „—")
 
 ## Quiz — jedno zagadnienie
 
 1. Pytanie?
-2. Pytanie?
 
 ### Odpowiedzi
 
-(twoje odpowiedzi; poprawne oznacz `[x]` w planie)
+—
+```
 
-## 2 — Kolejne zagadnienie
+## Szablon — history.md
+
+```markdown
+# Historia czatu
+
+## 1
+
+### Ty
+
+(twoja wiadomość)
+
+### Agent
+
+(odpowiedź agenta)
+
+## 2
+
+### Ty
 
 …
 ```
 
 ## Promocja do KB
 
-Gdy chcesz uporządkowaną notatkę w `docs/`:
+Źródło promocji: `high-level.md` (lub folder sesji — skrypt bierze `high-level.md`):
 
 ```bash
-npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi.md sailing/licenses_certificates/sm_prawo_drogi
+npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi/high-level.md sailing/licenses_certificates/sm_prawo_drogi
 ```
 
 Potem `npm run sync` (tylko pliki poza `conversations/`).

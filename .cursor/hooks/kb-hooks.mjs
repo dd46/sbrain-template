@@ -14,8 +14,9 @@ const STATE_DIR = join(__dirname, "state");
 const STATE_PATH = join(STATE_DIR, "kb-session.json");
 
 const PERSIST_CONTEXT = [
-  "Second Brain policy: persist session knowledge to docs/conversations/ (one ## heading per message, plan with checkboxes).",
-  "Keep chat replies short — one topic at a time. Structured docs/ only when user asks or npm run kb:promote.",
+  "Second Brain policy: session folder docs/conversations/YYYY-MM-DD-slug/ with high-level.md (plan+notes), history.md (Ty/Agent transcript), optional attachments/.",
+  "Empty chat history → create NEW session folder. Ongoing chat → append only to that folder.",
+  "Keep chat replies short — one topic at a time. Cite facts with [n] refs + Źródła legend (KB/web/model). Structured docs/ only when user asks or npm run kb:promote.",
   "Run npm run sync after structured docs/ edits (not for conversations/). Commit when done. Never push unless asked.",
   "See AGENTS.md and .cursor/rules/kb-persist.mdc.",
 ].join(" ");
@@ -23,7 +24,8 @@ const PERSIST_CONTEXT = [
 function defaultState() {
   return {
     external_knowledge_used: false,
-    docs_written: false,
+    conversations_written: false,
+    structured_docs_written: false,
     sync_ran: false,
     committed: false,
   };
@@ -57,6 +59,19 @@ function isDocsPath(path) {
   );
 }
 
+function isConversationsPath(path) {
+  if (!path || typeof path !== "string") return false;
+  const normalized = path.replace(/\\/g, "/");
+  return (
+    normalized.includes("/docs/conversations/") ||
+    normalized.startsWith("docs/conversations/")
+  );
+}
+
+function isStructuredDocsPath(path) {
+  return isDocsPath(path) && !isConversationsPath(path);
+}
+
 function extractEditedPath(toolName, toolInput) {
   if (!toolInput || typeof toolInput !== "object") return "";
   return toolInput.path ?? toolInput.file_path ?? toolInput.target_file ?? "";
@@ -83,8 +98,10 @@ function track() {
 
   if (toolName === "Write" || toolName === "StrReplace") {
     const path = extractEditedPath(toolName, input.tool_input);
-    if (isDocsPath(path)) {
-      state.docs_written = true;
+    if (isConversationsPath(path)) {
+      state.conversations_written = true;
+    } else if (isStructuredDocsPath(path)) {
+      state.structured_docs_written = true;
     }
   }
 
@@ -113,15 +130,15 @@ function stop() {
 
   const missing = [];
 
-  if (state.external_knowledge_used && !state.docs_written) {
+  if (state.external_knowledge_used && !state.conversations_written) {
     missing.push("zapisz sesję do docs/conversations/");
   }
 
-  if (state.docs_written && !state.sync_ran) {
+  if (state.structured_docs_written && !state.sync_ran) {
     missing.push("jeśli edytowałeś strukturalne docs/, uruchom npm run sync");
   }
 
-  if (state.docs_written && !state.committed) {
+  if (state.structured_docs_written && !state.committed) {
     missing.push("zrób git commit (bez push)");
   }
 

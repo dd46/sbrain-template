@@ -11,12 +11,15 @@ This repo is a **Second Brain**. Session knowledge lives in `docs/conversations/
 
 1. **Search `docs/` first** (structured notes + past sessions in `docs/conversations/`) before web search or model recall.
 2. **One topic per message** — short replies; do not dump whole syllabus blocks in chat.
-3. **Every turn with new content** → append/update **one** `##` section in the **current session file** under `docs/conversations/` (one `.md` per session). Do not only answer in chat.
-4. **Plan at top of session file:** `# Plan sesji` with `## Nauka` and `## Quiz` — each topic gets a matching `Quiz: …` checkbox; one checkbox ≈ one future message.
-5. **Do not ask permission** to save. Format: see `docs/conversations/README.md`.
-6. **Structured KB** (`docs/sailing/`, …) — update **only when the user asks**, or run `npm run kb:promote -- <session.md> <target/path>` then `npm run sync`.
-7. After editing structured `docs/` (not conversations), **run `npm run sync`** (`docker-compose up -d` if needed).
-8. **Commit** when the turn produced file edits. **Never push** unless the user explicitly asks.
+3. **New chat (empty history)** → **create** folder `docs/conversations/YYYY-MM-DD-<slug>/` with `high-level.md` + `history.md`. **Ongoing chat** → append to **that** folder only. Never merge chats into one folder.
+4. **Every turn with new content** → append `### Ty` / `### Agent` to `history.md`; update plan + one `##` section in `high-level.md`. Do not only answer in chat.
+5. **Plan in `high-level.md`:** `# Plan sesji` with `## Nauka` and `## Quiz` — each topic gets a matching `Quiz: …` checkbox; one checkbox ≈ one future message.
+6. **Attachments** from chat → save under `attachments/` in the session folder.
+7. **Do not ask permission** to save. Format: see `docs/conversations/README.md`.
+8. **Citations in chat:** numbered refs `[1]` at facts + `### Źródła` legend at bottom (`KB` / `web` / `model`). Quizzes without refs.
+9. **Structured KB** (`docs/sailing/`, …) — update **only when the user asks**, or run `npm run kb:promote -- <session>/high-level.md <target/path>` then `npm run sync`.
+10. After editing structured `docs/` (not conversations), **run `npm run sync`** (`docker-compose up -d` if needed).
+11. **Commit** when the turn produced file edits. **Never push** unless the user explicitly asks.
 
 ## Exemptions
 
