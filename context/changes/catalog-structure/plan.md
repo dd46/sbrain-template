@@ -211,36 +211,36 @@ Stem-form wiki-links (`[[wind]]`, `[[sailing_certificate]]`) are removed from `d
 
 #### Automated
 
-- [x] 1.1 spec.md explains root namespace as empty string
-- [x] 1.2 spec.md shows a docs/-relative wiki-link example
-- [x] 1.3 spec.md still describes recommendations.md as optional
+- [x] 1.1 spec.md explains root namespace as empty string — 0f826d5
+- [x] 1.2 spec.md shows a docs/-relative wiki-link example — 0f826d5
+- [x] 1.3 spec.md still describes recommendations.md as optional — 0f826d5
 
 #### Manual
 
-- [x] 1.4 §2–3 is enough to implement a parser without opening docs/
+- [x] 1.4 §2–3 is enough to implement a parser without opening docs/ — 0f826d5
 
 ### Phase 2: Seed alignment
 
 #### Automated
 
-- [x] 2.1 no stem-only wiki-links remain under docs/
-- [x] 2.2 sailing_certificate.md links to [[sailing/basics/wind]]
-- [x] 2.3 wind.md links to [[sailing/licenses_certificates/sailing_certificate]]
+- [x] 2.1 no stem-only wiki-links remain under docs/ — 0f826d5
+- [x] 2.2 sailing_certificate.md links to [[sailing/basics/wind]] — 0f826d5
+- [x] 2.3 wind.md links to [[sailing/licenses_certificates/sailing_certificate]] — 0f826d5
 
 #### Manual
 
-- [x] 2.4 sample notes still read as English; only Internal targets changed
+- [x] 2.4 sample notes still read as English; only Internal targets changed — 0f826d5
 
 ### Phase 3: Catalog verification
 
 #### Automated
 
-- [x] 3.1 all six expected catalog paths exist
-- [x] 3.2 empty namespace only at docs/recommendations.md; dotted ids elsewhere
-- [x] 3.3 regular notes have References / Internal / External headings
-- [x] 3.4 exactly four files use type: "recommendations"
-- [x] 3.5 every [[wiki-link]] under docs/ resolves to docs/<path>.md
+- [x] 3.1 all six expected catalog paths exist — 0f826d5
+- [x] 3.2 empty namespace only at docs/recommendations.md; dotted ids elsewhere — 0f826d5
+- [x] 3.3 regular notes have References / Internal / External headings — 0f826d5
+- [x] 3.4 exactly four files use type: "recommendations" — 0f826d5
+- [x] 3.5 every [[wiki-link]] under docs/ resolves to docs/<path>.md — 0f826d5
 
 #### Manual
 
-- [x] 3.6 all six files are English and still illustrate hierarchy
+- [x] 3.6 all six files are English and still illustrate hierarchy — 0f826d5
