@@ -13,9 +13,12 @@ type ThreadListResponse = {
   threads: ThreadInfo[];
 };
 
+export type ChatMode = "text" | "voice";
+
 export function ChatApp() {
   const [threads, setThreads] = useState<ThreadInfo[]>([]);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
+  const [mode, setMode] = useState<ChatMode>("text");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -99,10 +102,45 @@ export function ChatApp() {
           <h1 className="text-base font-semibold">Second Brain</h1>
           <p className="mt-1 text-xs text-zinc-500">
             Każdy wątek zapisuje się w{" "}
-            <code className="rounded bg-zinc-100 px-1 dark:bg-zinc-900">docs/conversations/</code>.
-            Pamięć wątku (MemorySaver) znika po restarcie serwera chatu.
+            <code className="rounded bg-zinc-100 px-1 dark:bg-zinc-900">docs/conversations/</code>{" "}
+            po pierwszej wiadomości. Pamięć wątku znika po restarcie serwera chatu.
           </p>
         </div>
+
+        <div className="border-b border-zinc-200 p-3 dark:border-zinc-800">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">Tryb</p>
+          <div className="grid grid-cols-2 gap-1 rounded-lg bg-zinc-200/70 p-1 dark:bg-zinc-900">
+            <button
+              type="button"
+              onClick={() => setMode("text")}
+              className={`rounded-md px-3 py-2 text-sm font-medium ${
+                mode === "text"
+                  ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-100"
+                  : "text-zinc-600 dark:text-zinc-400"
+              }`}
+            >
+              Czat
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("voice")}
+              className={`rounded-md px-3 py-2 text-sm font-medium ${
+                mode === "voice"
+                  ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-100"
+                  : "text-zinc-600 dark:text-zinc-400"
+              }`}
+            >
+              Głos
+            </button>
+          </div>
+          {mode === "voice" ? (
+            <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">
+              Chrome + mikrofon. Jednorazowe pozwolenie, potem mów bez klikania start/stop. Cisza
+              ~1,2 s wysyła wiadomość.
+            </p>
+          ) : null}
+        </div>
+
         <div className="p-3">
           <button
             type="button"
@@ -142,6 +180,7 @@ export function ChatApp() {
             threadId={thread.id}
             sessionPath={thread.sessionPath}
             visible={thread.id === activeThreadId}
+            voiceMode={mode === "voice"}
           />
         ))}
         {!activeThread ? (

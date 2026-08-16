@@ -11,7 +11,7 @@
     "kb:promote": "node scripts/kb_promote.js",
     "mcp": "node mcp_server/server.js",
     "chat": "npm run dev --prefix web",
-    "test": "node --test tests/parse-catalog.test.js tests/chat-agent.test.js tests/docs-fs.test.js tests/conversation-persist.test.js",
+    "test": "node --test tests/parse-catalog.test.js tests/chat-agent.test.js tests/docs-fs.test.js tests/conversation-persist.test.js tests/speech-text.test.js",
     "test:integration": "node --test --test-concurrency=1 tests/integration/sync-graph.test.js tests/integration/kb-tools.test.js"
   },
   "dependencies": {
