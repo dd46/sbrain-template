@@ -1,0 +1,4 @@
+# Local agent skills — not part of the product
+# (symlinks; no trailing slash so gitignore matches the link itself)
+.claude/skills
+.cursor/skills
