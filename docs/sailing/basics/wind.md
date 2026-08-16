@@ -26,7 +26,7 @@ Think of a sail as a wing standing on its side. Air flowing over both sides crea
 ---
 ## References
 ### Internal
-- [[sailing_certificate]]
+- [[sailing/licenses_certificates/sailing_certificate]]
 ### External
 - [Forces on sails](https://en.wikipedia.org/wiki/Forces_on_sails)
 - [Apparent wind](https://en.wikipedia.org/wiki/Apparent_wind)

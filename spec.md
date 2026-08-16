@@ -6,11 +6,15 @@ Ready-to-copy full specification for Cursor:
 Build a local Second Brain system based on Markdown files, a Neo4j graph database, and the MCP protocol. The system should work from the Cursor editor and allow knowledge management in hierarchical, isolated spaces (namespaces/folders). The entire operational backend (scripts, MCP server) will be written in Node.js (JavaScript).
 
 ## 2. Directory Structure
-Cursor should generate the following file structure at the start. Knowledge spaces (namespaces) are hierarchical (folders within folders). Each level may have a dedicated `recommendations.md` file:
+Cursor should generate the following file structure at the start. Knowledge spaces (namespaces) are hierarchical (folders within folders). Namespace ids equal the dotted folder path under `docs/` (for example `sailing/basics/` → `sailing.basics`).
+
+`docs/` is the root namespace. Its id is the empty string (`namespace: ""`). Notes and `recommendations.md` that sit directly in `docs/` use that id. A parser must treat `""` as a real Namespace node, not as missing.
+
+`recommendations.md` is optional at every level (`may`, not `must`). The sample tree includes one at each level only to demonstrate the format.
 
 ```text
 /
-├── docs/                             # Main knowledge base (root namespace)
+├── docs/                             # Main knowledge base (root namespace, id: "")
 │   ├── recommendations.md            # Recommendations for the root level
 │   ├── sailing/                      # Main Namespace (id: "sailing")
 │   │   ├── recommendations.md        # Recommendations for "sailing"
@@ -38,6 +42,10 @@ Main content.
 
 References section at the very bottom.
 
+`namespace: ""` is valid only for notes that sit directly in `docs/`. Nested notes use a dotted id matching their folder path.
+
+Internal wiki-links are paths relative to `docs/`, with forward slashes and no `.md` suffix (for example `[[sailing/basics/wind]]`).
+
 ```markdown
 ---
 title: "Note Title"
@@ -52,7 +60,7 @@ prerequisites: ["Requirement 1"]
 ---
 ## References
 ### Internal
-- [[other_file_name]]
+- [[sailing/basics/wind]]
 ### External
 - [Source title](https://link.com)
 ```
@@ -63,7 +71,7 @@ Used to collect materials to learn. First-level headings (`#`) define the intent
 ```markdown
 ---
 type: "recommendations"
-namespace: "parent.child" # e.g. "sailing.basics"
+namespace: "parent.child" # e.g. "sailing.basics"; use namespace: "" at docs/ root
 ---
 # I want to understand sail aerodynamics
 - [How a sail works - video](https://youtube.com/watch?v=...)
@@ -138,7 +146,7 @@ NEW: `get_recommendations(namespace_id: string)` - fetches from Neo4j a list of 
 ## 7. Startup Instructions for Cursor (First Deployment)
 Initialize a Node.js project (`npm init -y`) and install packages (`npm install neo4j-driver @modelcontextprotocol/sdk gray-matter`).
 
-Create the file structure including `recommendations.md` files for each level.
+Create the file structure. The sample may include `recommendations.md` at each level to demonstrate the optional format.
 
 Write the contents of `docker-compose.yml` and the MCP server (`server.js`).
 

@@ -23,7 +23,7 @@ You cannot use a certificate well without the concepts in `sailing.basics`. Wind
 ---
 ## References
 ### Internal
-- [[wind]]
+- [[sailing/basics/wind]]
 ### External
 - [RYA training](https://www.rya.org.uk/training)
 - [ICC overview](https://www.rya.org.uk/qualifications/icc)
