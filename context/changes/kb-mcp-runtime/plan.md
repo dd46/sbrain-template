@@ -404,10 +404,10 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [x] 4.1 npm test passes without Docker
-- [x] 4.2 npm run test:integration passes with compose up
-- [x] 4.3 spec.md install line includes zod
-- [x] 4.4 README documents compose up and npm run sync
+- [x] 4.1 npm test passes without Docker — cec1405
+- [x] 4.2 npm run test:integration passes with compose up — cec1405
+- [x] 4.3 spec.md install line includes zod — cec1405
+- [x] 4.4 README documents compose up and npm run sync — cec1405
 
 #### Manual
 
