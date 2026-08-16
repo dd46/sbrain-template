@@ -375,10 +375,10 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [x] 2.1 parser unit tests pass
-- [x] 2.2 npm run sync is idempotent on the sailing seed
-- [x] 2.3 graph contains root Namespace "", Documents with extra frontmatter, REFERENCES, and Intents
-- [x] 2.4 wipe runs inside a write transaction after validation
+- [x] 2.1 parser unit tests pass — 01b7e64
+- [x] 2.2 npm run sync is idempotent on the sailing seed — 01b7e64
+- [x] 2.3 graph contains root Namespace "", Documents with extra frontmatter, REFERENCES, and Intents — 01b7e64
+- [x] 2.4 wipe runs inside a write transaction after validation — 01b7e64
 
 #### Manual
 
@@ -389,10 +389,10 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [ ] 3.1 all four tool names are registered
-- [ ] 3.2 mcp_server/ has no console.log
-- [ ] 3.3 tool handlers succeed against the synced seed
-- [ ] 3.4 .cursor/mcp.json launches node mcp_server/server.js
+- [x] 3.1 all four tool names are registered
+- [x] 3.2 mcp_server/ has no console.log
+- [x] 3.3 tool handlers succeed against the synced seed
+- [x] 3.4 .cursor/mcp.json launches node mcp_server/server.js
 
 #### Manual
 
