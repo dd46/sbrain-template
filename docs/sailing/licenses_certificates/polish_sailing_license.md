@@ -11,7 +11,7 @@ prerequisites: []
 
 The **patent żeglarza jachtowego** is the entry-level recreational sailing certificate in Poland. It is issued by **PZŻ** (Polski Związek Żeglarski), not PZMWiNW (which handles motorboat licenses).
 
-Boats up to **7.5 m** can be operated without any license. Above that, or on coastal/marine waters, you need a certificate.
+Boats up to **7.5 m** can be operated without any license. Above that, or on coastal/marine waters, you need a certificate. Full no-patent limits (motor + sail): [[sailing/licenses_certificates/operating_without_license]].
 
 ## Requirements
 
@@ -64,6 +64,7 @@ A sailing certificate covers auxiliary engine use on a sailboat. For a **dedicat
 ---
 ## References
 ### Internal
+- [[sailing/licenses_certificates/operating_without_license]]
 - [[sailing/licenses_certificates/polish_motorboat_license]]
 - [[sailing/licenses_certificates/sailing_certificate]]
 ### External

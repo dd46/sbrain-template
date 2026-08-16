@@ -17,6 +17,7 @@ A recreational boating certificate confirms you completed a training syllabus â€
 |-------------|--------|------|
 | Å»eglarz jachtowy | PZÅ» | [[sailing/licenses_certificates/polish_sailing_license]] |
 | Sternik motorowodny | PZMWiNW | [[sailing/licenses_certificates/polish_motorboat_license]] |
+| Bez patentu (limity) | â€” | [[sailing/licenses_certificates/operating_without_license]] |
 
 ## International
 
@@ -26,6 +27,7 @@ A recreational boating certificate confirms you completed a training syllabus â€
 ---
 ## References
 ### Internal
+- [[sailing/licenses_certificates/operating_without_license]]
 - [[sailing/licenses_certificates/polish_sailing_license]]
 - [[sailing/licenses_certificates/polish_motorboat_license]]
 ### External

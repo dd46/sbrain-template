@@ -24,6 +24,8 @@ The **patent sternika motorowodnego (SM)** is the entry-level license for operat
 - **Sea** — motorboats up to **12 m** hull length, **daytime only**, within **2 NM** of shore
 - **Under 16 years old** — engine power limited to **60 kW**
 
+Without SM you can still operate smaller boats — see [[sailing/licenses_certificates/operating_without_license]] (≤10 kW motor, houseboat path, sail ≤7.5 m).
+
 ## Exam
 
 Two parts on the same day:
@@ -85,6 +87,7 @@ For sailboats with auxiliary engine, a sailing certificate is sufficient. For de
 ---
 ## References
 ### Internal
+- [[sailing/licenses_certificates/operating_without_license]]
 - [[sailing/licenses_certificates/polish_sailing_license]]
 - [[sailing/licenses_certificates/sailing_certificate]]
 ### External
