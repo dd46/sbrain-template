@@ -16,7 +16,7 @@ This repo is a **Second Brain**. Session knowledge lives in `docs/conversations/
 5. **Plan in `high-level.md`:** `# Plan sesji` with `## Nauka` and `## Quiz` — each topic gets a matching `Quiz: …` checkbox; one checkbox ≈ one future message.
 6. **Attachments** from chat → save under `attachments/` in the session folder.
 7. **Do not ask permission** to save. Format: see `docs/conversations/README.md`.
-8. **Citations in chat:** numbered refs `[1]` at facts + `### Źródła` legend at bottom (`KB` / `web` / `model`). Quizzes without refs.
+8. **Citations in chat:** numbered refs `[1]` at facts + `### Źródła` legend (`KB` / `web` / `model` + **Pewność** `High` / `Medium` / `Low` = fidelity, not exam usefulness). Quizzes without refs.
 9. **Structured KB** (`docs/sailing/`, …) — update **only when the user asks** (never silently from chat). `kb:promote` prepares a note; **synchronizuj** is the only trigger to log impact in `sync.md`, set `quiz_confirmed` on note H2s (after grading quiz answers), and run `npm run sync`.
 10. After editing structured `docs/` (not conversations), **run `npm run sync`** (`docker-compose up -d` if needed).
 11. **Commit** when the turn produced file edits. **Never push** unless the user explicitly asks.

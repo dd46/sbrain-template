@@ -11,7 +11,7 @@ When the user asks about **anything other than building or changing this Second 
 3. **Follow the graph.** Use `get_document_graph` and wiki-links (`[[sailing/basics/wind]]`) to pull related notes before answering.
 4. **Check recommendations.** `recommendations.md` at each namespace level lists intents the user wanted to explore — use them when the question is exploratory.
 5. **Persist every answer.** Write to **`docs/conversations/<session>/`** — `high-level.md`, `history.md`, `sync.md` (`synced: false` until **synchronizuj**), optional `attachments/`. **Empty chat history → new session folder**; ongoing chat → append to that folder only. Structured KB edits only on request. **synchronizuj** → grade quizzes, update `quiz_confirmed` on note H2s, log `sync.md`, `npm run sync`. Optional `kb:promote` creates a note with `track_quiz: true`.
-6. **Cite in chat.** Numbered refs `[n]` at facts + `### Źródła` legend (`KB` / `web` / `model`). See `docs/conversations/README.md`.
+6. **Cite in chat.** Numbered refs `[n]` at facts + `### Źródła` legend (`KB` / `web` / `model` + **Pewność** High/Medium/Low = citation fidelity, not usefulness). See `docs/conversations/README.md`.
 7. **Sync and commit yourself.** Run `npm run sync` only after structured `docs/` edits. Commit when the turn changed files. **Do not push** unless you explicitly ask.
 8. **Hooks enforce this.** @.cursor/rules/kb-persist.mdc applies to every session. @.cursor/hooks.json runs `sessionStart` (inject policy) and `stop` (auto-follow-up if web research was used without a `docs/` write).
 

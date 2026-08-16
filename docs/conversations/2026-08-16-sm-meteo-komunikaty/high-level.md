@@ -10,11 +10,15 @@ continues: "docs/conversations/2026-08-16-sm-meteorologia"
 ## Nauka
 
 - [x] Kontynuacja tematu 7 — komunikaty meteorologiczne (po Beaufort + fronty/chmury)
-- [ ] Quiz komunikatów (odpowiedzi w kolejnej wiadomości)
+- [x] Format Źródeł: kolumna **Pewność** High / Medium / Low (wierność cytatu, nie przydatność)
+- [ ] Quiz komunikatów (odłożony — user: „nudne, daj coś innego”)
+- [x] Skok: człowiek za burtą (MOB) — scena, nie tabela
+- [ ] Quiz MOB
 
 ## Quiz
 
 - [ ] Quiz: komunikaty pogodowe
+- [ ] Quiz: człowiek za burtą
 
 ## Komunikaty meteorologiczne dla żeglarzy
 
@@ -75,6 +79,32 @@ Aplikacje (Windy itd.) są praktyczne, ale na egzaminie i przed wyjściem **licz
 2. Stopień 2 ostrzeżenia IMGW — jaki kolor i czy wypływasz na jezioro przy burzy?
 3. Skala Beauforta opisuje wiatr. Jaka skala w prognozie morskiej opisuje stan morza (falę)?
 4. Na którym kanale VHF zapowiadane są komunikaty pogodowe — 16 czy od razu roboczy?
+
+### Odpowiedzi
+
+—
+
+## Format Źródeł — Pewność
+
+Kolumna **Pewność**: czy źródło oddane wiernie, bez przekłamania. To **nie** jest ocena przydatności na egzamin.
+
+| | Znaczenie |
+|---|-----------|
+| **High** | Parafraza blisko oryginału; nic nie dopisałem „od siebie” do tego źródła |
+| **Medium** | Skrót, uogólnienie albo wniosek praktyczny wmieszany w treść źródła |
+| **Low** | Wniosek modelu / luźna analogia — źródła brak albo użyte jako podkładka |
+
+## Człowiek za burtą (MOB)
+
+Egzamin praktyczny: manekin/boja, podejście od **zawietrznej**, silnik na luz/wyłączony przy burcie. Teoria też to pyta.
+
+Kolejność pod stresem: alarm → koło (nawietrzna rozbitka, dryfuje do niego) → imienne „oko” → cyrkulacja → podejście od zawietrznej (wiatr znosi łódź *od* człowieka, nie na niego) → luz/silnik off → wyciągnąć od burty, nie od rufy (śruba).
+
+### Quiz — MOB
+
+1. Krzyczysz „człowiek za burtą”. Co robisz w tej samej sekundzie, zanim skręcisz?
+2. Podchodzisz od zawietrznej czy nawietrznej — i dlaczego?
+3. Silnik przy burcie rozbitka: gaz, luz, czy wyłączony?
 
 ### Odpowiedzi
 

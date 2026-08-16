@@ -26,17 +26,26 @@ Jedna sesja chatu = folder `docs/conversations/YYYY-MM-DD-<slug>/`:
 Każda wiadomość z treścią merytoryczną:
 
 1. **Referencje numerowane** przy zdaniach/faktach: `[1]`, `[2]` … (wiele źródeł: `[1][3]`).
-2. **Legenda na dole** — sekcja `### Źródła` z tabelą: `# | Typ | Źródło`.
+2. **Legenda na dole** — sekcja `### Źródła` z tabelą: `# | Typ | Pewność | Źródło`.
 3. **Typy:** `KB` (wiki-link w `docs/`), `web` (URL), `model` (wniosek bez dosłownego cytatu).
-4. Quizy bez referencji — to pytania do użytkownika.
+4. **Pewność** — czy źródło oddane wiernie, bez przekłamania: `High` / `Medium` / `Low`.
+5. Quizy bez referencji — to pytania do użytkownika.
+
+**Pewność** (wierność cytatu, nie przydatność na egzamin)
+
+| | Znaczenie |
+|---|-----------|
+| **High** | Parafraza blisko oryginału; nic nie dopisałem „od siebie” do tego źródła |
+| **Medium** | Skrót, uogólnienie albo wniosek praktyczny wmieszany w treść źródła |
+| **Low** | Wniosek modelu / luźna analogia — źródła brak albo użyte jako podkładka |
 
 Przykład legendy:
 
-| # | Typ | Źródło |
-|---|-----|--------|
-| [1] | KB | [[sailing/licenses_certificates/sm_exam_syllabus]] — temat 7 |
-| [2] | web | [IMGW — antycyklony](https://obserwator.imgw.pl/…) |
-| [3] | model | Wniosek praktyczny / pułapka egzaminacyjna |
+| # | Typ | Pewność | Źródło |
+|---|-----|---------|--------|
+| [1] | KB | High | [[sailing/licenses_certificates/sm_exam_syllabus]] — temat 7 |
+| [2] | web | High | [IMGW — antycyklony](https://obserwator.imgw.pl/…) |
+| [3] | model | Low | Wniosek praktyczny / pułapka egzaminacyjna |
 
 ## Szablon — high-level.md
 
