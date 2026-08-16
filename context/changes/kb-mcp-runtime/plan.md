@@ -389,10 +389,10 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [x] 3.1 all four tool names are registered
-- [x] 3.2 mcp_server/ has no console.log
-- [x] 3.3 tool handlers succeed against the synced seed
-- [x] 3.4 .cursor/mcp.json launches node mcp_server/server.js
+- [x] 3.1 all four tool names are registered — 722bd88
+- [x] 3.2 mcp_server/ has no console.log — 722bd88
+- [x] 3.3 tool handlers succeed against the synced seed — 722bd88
+- [x] 3.4 .cursor/mcp.json launches node mcp_server/server.js — 722bd88
 
 #### Manual
 
@@ -404,10 +404,10 @@ First sync on an empty database is the migration. Re-sync is destructive for the
 
 #### Automated
 
-- [ ] 4.1 npm test passes without Docker
-- [ ] 4.2 npm run test:integration passes with compose up
-- [ ] 4.3 spec.md install line includes zod
-- [ ] 4.4 README documents compose up and npm run sync
+- [x] 4.1 npm test passes without Docker
+- [x] 4.2 npm run test:integration passes with compose up
+- [x] 4.3 spec.md install line includes zod
+- [x] 4.4 README documents compose up and npm run sync
 
 #### Manual
 

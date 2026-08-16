@@ -132,6 +132,8 @@ Environment variables with access to Neo4j (`neo4j:7687`).
 
 Exposes MCP tools via STDIO.
 
+**Runtime note:** Cursor launches the MCP server on the host (`node mcp_server/server.js`) over STDIO. `docker-compose.yml` in this repo runs **Neo4j only**; the `mcp_server/Dockerfile` is kept for optional containerized runs, not as a long-running compose service.
+
 ## 6. MCP Integration (Model Context Protocol)
 The MCP server (`server.js`) should be written in Node.js (with `@modelcontextprotocol/sdk`) and expose the following tools:
 
@@ -144,7 +146,7 @@ The MCP server (`server.js`) should be written in Node.js (with `@modelcontextpr
 NEW: `get_recommendations(namespace_id: string)` - fetches from Neo4j a list of intents and their assigned resources (links) for the given namespace.
 
 ## 7. Startup Instructions for Cursor (First Deployment)
-Initialize a Node.js project (`npm init -y`) and install packages (`npm install neo4j-driver @modelcontextprotocol/sdk gray-matter`).
+Initialize a Node.js project (`npm init -y`) and install packages (`npm install neo4j-driver @modelcontextprotocol/sdk gray-matter zod`).
 
 Create the file structure. The sample may include `recommendations.md` at each level to demonstrate the optional format.
 
