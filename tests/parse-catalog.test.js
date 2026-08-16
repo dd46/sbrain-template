@@ -97,3 +97,25 @@ prerequisites: []
   assert.equal(catalog.intentBundles.length, 0);
   fs.rmSync(tmp, { recursive: true, force: true });
 });
+
+test("docs/conversations/ is excluded from catalog", () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "sbrain-conv-"));
+  const convDir = path.join(tmp, "conversations");
+  fs.mkdirSync(convDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(convDir, "session.md"),
+    `---
+title: "Session"
+session: "2026-01-01"
+---
+# Plan
+`,
+    "utf8",
+  );
+
+  const catalog = parseCatalog(tmp);
+  assert.equal(catalog.errors.length, 0, catalog.errors.join("; "));
+  assert.equal(catalog.namespaces.some((n) => n.id === "conversations"), false);
+  assert.equal(catalog.documents.some((d) => d.path.startsWith("conversations/")), false);
+  fs.rmSync(tmp, { recursive: true, force: true });
+});

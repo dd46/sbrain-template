@@ -14,11 +14,9 @@ const STATE_DIR = join(__dirname, "state");
 const STATE_PATH = join(STATE_DIR, "kb-session.json");
 
 const PERSIST_CONTEXT = [
-  "Second Brain policy: every factual answer must be persisted to docs/ in the same turn.",
-  "Search docs/ or sbrain MCP first. After providing new information, create or update .md notes per spec.md.",
-  "Run npm run sync yourself after docs/ edits (docker-compose up -d if Neo4j is down).",
-  "Commit all file changes when the turn is done. Never push unless the user explicitly asks.",
-  "Do not ask permission to save. Set status consumed when the user learned it in chat.",
+  "Second Brain policy: persist session knowledge to docs/conversations/ (one ## heading per message, plan with checkboxes).",
+  "Keep chat replies short — one topic at a time. Structured docs/ only when user asks or npm run kb:promote.",
+  "Run npm run sync after structured docs/ edits (not for conversations/). Commit when done. Never push unless asked.",
   "See AGENTS.md and .cursor/rules/kb-persist.mdc.",
 ].join(" ");
 
@@ -116,11 +114,11 @@ function stop() {
   const missing = [];
 
   if (state.external_knowledge_used && !state.docs_written) {
-    missing.push("zapisz wyniki do docs/");
+    missing.push("zapisz sesję do docs/conversations/");
   }
 
   if (state.docs_written && !state.sync_ran) {
-    missing.push("uruchom npm run sync");
+    missing.push("jeśli edytowałeś strukturalne docs/, uruchom npm run sync");
   }
 
   if (state.docs_written && !state.committed) {

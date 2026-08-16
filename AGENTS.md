@@ -10,8 +10,8 @@ When the user asks about **anything other than building or changing this Second 
 2. **Respect note metadata.** `status` (`draft` | `consumed` | `mastered`), `summary`, `tags`, and `prerequisites` reflect what the user already knows or is learning. Align answers with that level.
 3. **Follow the graph.** Use `get_document_graph` and wiki-links (`[[sailing/basics/wind]]`) to pull related notes before answering.
 4. **Check recommendations.** `recommendations.md` at each namespace level lists intents the user wanted to explore — use them when the question is exploratory.
-5. **Persist every answer.** Any new information you provide **must** be written to `docs/` in the same turn (create or update `.md` files per @spec.md). Do not only answer in chat. Do not ask permission — save first, then summarize what you wrote. Web search is a fallback for gaps, not a substitute for persisting the result.
-6. **Sync and commit yourself.** After `docs/` edits run `npm run sync` (start Neo4j with `docker-compose up -d` if needed). Commit all changes from the turn with a concise message. **Do not push** unless the user explicitly asks.
+5. **Persist every answer.** Write to **`docs/conversations/`** (session history: plan + one `##` heading per message). Do not only answer in chat. Structured notes under `docs/sailing/` etc. — **only when you ask** or via `npm run kb:promote`.
+6. **Sync and commit yourself.** Run `npm run sync` only after structured `docs/` edits. Commit when the turn changed files. **Do not push** unless you explicitly ask.
 7. **Hooks enforce this.** @.cursor/rules/kb-persist.mdc applies to every session. @.cursor/hooks.json runs `sessionStart` (inject policy) and `stop` (auto-follow-up if web research was used without a `docs/` write).
 
 App-development prompts (MCP server, sync, tests, infra, `context/changes/`) follow the repo sections below instead.
@@ -21,6 +21,7 @@ App-development prompts (MCP server, sync, tests, infra, `context/changes/`) fol
 | Path | Role |
 |------|------|
 | `docs/` | Knowledge base (namespaces, notes, `recommendations.md`) |
+| `docs/conversations/` | Chat session history (not synced to Neo4j) |
 | `lib/` | Parser, Neo4j sync, KB query helpers |
 | `mcp_server/` | MCP server (`sbrain`) |
 | `scripts/sync_to_neo4j.js` | Catalog → Neo4j loader |
@@ -33,6 +34,7 @@ App-development prompts (MCP server, sync, tests, infra, `context/changes/`) fol
 | `npm install` | Install dependencies |
 | `docker-compose up -d` | Start Neo4j |
 | `npm run sync` | Reload graph from `docs/` |
+| `npm run kb:promote -- <session.md> <target/path>` | Promote conversation → structured KB note |
 | `npm test` | Parser unit tests (no Docker) |
 | `npm run test:integration` | Graph + MCP tool tests (Neo4j required) |
 

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "sync": "node scripts/sync_to_neo4j.js",
+    "kb:promote": "node scripts/kb_promote.js",
     "mcp": "node mcp_server/server.js",
     "test": "node --test tests/parse-catalog.test.js",
     "test:integration": "node --test tests/integration/sync-graph.test.js tests/integration/kb-tools.test.js"
