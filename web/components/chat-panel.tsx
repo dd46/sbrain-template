@@ -26,9 +26,16 @@ type ChatPanelProps = {
   sessionPath?: string;
   visible: boolean;
   voiceMode: boolean;
+  pushToTalk?: boolean;
 };
 
-export function ChatPanel({ threadId, sessionPath, visible, voiceMode }: ChatPanelProps) {
+export function ChatPanel({
+  threadId,
+  sessionPath,
+  visible,
+  voiceMode,
+  pushToTalk = false,
+}: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [awaitingQuizAnswers, setAwaitingQuizAnswers] = useState(false);
   const [ttsRunning, setTtsRunning] = useState(false);
@@ -82,6 +89,7 @@ export function ChatPanel({ threadId, sessionPath, visible, voiceMode }: ChatPan
 
   const voice = useVoiceSession({
     enabled: voiceMode && visible,
+    pushToTalk,
     blockCommits: isBusy || ttsRunning,
     onCommit: handleCommit,
     onBargeIn: () => {
@@ -158,10 +166,14 @@ export function ChatPanel({ threadId, sessionPath, visible, voiceMode }: ChatPan
       : voice.phase === "blocked"
         ? "Agent odpowiada…"
         : awaitingQuizAnswers
-          ? "Słucham odpowiedzi quizu…"
-          : voice.listening
+          ? pushToTalk
+            ? "Przytrzymaj i odpowiedz na quiz…"
+            : "Słucham odpowiedzi quizu…"
+          : voice.listening || voice.pttActive
             ? "Słucham…"
-            : "Głos"
+            : pushToTalk
+              ? "Przytrzymaj i mów"
+              : "Głos"
     : null;
 
   return (
@@ -183,8 +195,9 @@ export function ChatPanel({ threadId, sessionPath, visible, voiceMode }: ChatPan
               </p>
             ) : (
               <p className="mt-1 text-xs text-emerald-800/70 dark:text-emerald-300/70">
-                Mów naturalnie. Po ~1,2 s ciszy wiadomość wyśle się sama. Przerwij agenta, mówiąc
-                ponownie.
+                {pushToTalk
+                  ? "Przytrzymaj przycisk u dołu, mów, puść — wiadomość wyśle się sama. Mikrofon jest wyłączony, gdy nic nie trzymasz."
+                  : "Mów naturalnie. Po ~1,2 s ciszy wiadomość wyśle się sama. Najlepiej ze słuchawkami — głośnik może przerywać odpowiedź."}
               </p>
             )}
             {voice.error ? (
@@ -280,6 +293,41 @@ export function ChatPanel({ threadId, sessionPath, visible, voiceMode }: ChatPan
             </div>
           </div>
         </form>
+      ) : pushToTalk ? (
+        <div className="border-t border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+          <button
+            type="button"
+            disabled={Boolean(voice.error)}
+            className={`w-full select-none rounded-2xl px-4 py-5 text-base font-semibold transition-colors ${
+              voice.pttActive
+                ? "bg-emerald-600 text-white shadow-inner"
+                : "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100"
+            } disabled:opacity-50`}
+            onPointerDown={(event) => {
+              event.preventDefault();
+              event.currentTarget.setPointerCapture(event.pointerId);
+              voice.setPttActive(true);
+            }}
+            onPointerUp={(event) => {
+              event.preventDefault();
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              }
+              voice.setPttActive(false);
+            }}
+            onPointerCancel={(event) => {
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              }
+              voice.setPttActive(false);
+            }}
+            onLostPointerCapture={() => {
+              voice.setPttActive(false);
+            }}
+          >
+            {voice.pttActive ? "Mów… (puść, aby wysłać)" : "Przytrzymaj i mów"}
+          </button>
+        </div>
       ) : null}
     </div>
   );

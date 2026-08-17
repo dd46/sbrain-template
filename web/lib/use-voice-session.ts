@@ -37,6 +37,8 @@ export type VoicePhase = "idle" | "listening" | "speaking" | "blocked";
 
 export type UseVoiceSessionOptions = {
   enabled: boolean;
+  /** Mic only while the user holds the PTT control (avoids speaker echo). */
+  pushToTalk?: boolean;
   /** When true, do not commit transcripts (agent streaming). Barge-in still fires. */
   blockCommits?: boolean;
   onCommit: (text: string) => void | Promise<void>;
@@ -45,11 +47,13 @@ export type UseVoiceSessionOptions = {
 
 export function useVoiceSession({
   enabled,
+  pushToTalk = false,
   blockCommits = false,
   onCommit,
   onBargeIn,
 }: UseVoiceSessionOptions) {
   const [listening, setListening] = useState(false);
+  const [pttActive, setPttActiveState] = useState(false);
   const [transcriptDraft, setTranscriptDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<VoicePhase>("idle");
@@ -59,12 +63,16 @@ export function useVoiceSession({
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingTranscriptRef = useRef("");
   const enabledRef = useRef(enabled);
+  const pushToTalkRef = useRef(pushToTalk);
+  const pttActiveRef = useRef(false);
   const blockCommitsRef = useRef(blockCommits);
   const onCommitRef = useRef(onCommit);
   const onBargeInRef = useRef(onBargeIn);
   const restartingRef = useRef(false);
 
   enabledRef.current = enabled;
+  pushToTalkRef.current = pushToTalk;
+  pttActiveRef.current = pttActive;
   blockCommitsRef.current = blockCommits;
   onCommitRef.current = onCommit;
   onBargeInRef.current = onBargeIn;
@@ -88,6 +96,9 @@ export function useVoiceSession({
   }, [clearSilenceTimer]);
 
   const scheduleCommit = useCallback(() => {
+    if (pushToTalkRef.current) {
+      return;
+    }
     clearSilenceTimer();
     silenceTimerRef.current = setTimeout(() => {
       void commitPending();
@@ -179,6 +190,11 @@ export function useVoiceSession({
         setPhase("idle");
         return;
       }
+      if (pushToTalkRef.current && !pttActiveRef.current) {
+        setListening(false);
+        setPhase(isSpeaking() ? "speaking" : blockCommitsRef.current ? "blocked" : "idle");
+        return;
+      }
       if (restartingRef.current) {
         return;
       }
@@ -206,10 +222,33 @@ export function useVoiceSession({
     }
   }, [handleTranscript]);
 
+  const stopRecognitionOnly = useCallback(() => {
+    clearSilenceTimer();
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.onend = null;
+        recognitionRef.current.stop();
+      } catch {
+        try {
+          recognitionRef.current.abort();
+        } catch {
+          /* ignore */
+        }
+      }
+      recognitionRef.current = null;
+    }
+    setListening(false);
+    if (!isSpeaking() && !blockCommitsRef.current) {
+      setPhase("idle");
+    }
+  }, [clearSilenceTimer]);
+
   const stop = useCallback(() => {
     clearSilenceTimer();
     pendingTranscriptRef.current = "";
     setTranscriptDraft("");
+    pttActiveRef.current = false;
+    setPttActiveState(false);
     enabledRef.current = false;
 
     if (recognitionRef.current) {
@@ -263,16 +302,51 @@ export function useVoiceSession({
       return;
     }
 
-    startRecognition();
+    if (!pushToTalkRef.current) {
+      startRecognition();
+    }
   }, [startRecognition]);
+
+  const setPttActive = useCallback(
+    (active: boolean) => {
+      if (!enabledRef.current || !pushToTalkRef.current) {
+        return;
+      }
+
+      pttActiveRef.current = active;
+      setPttActiveState(active);
+
+      if (active) {
+        startRecognition();
+        return;
+      }
+
+      void commitPending();
+      stopRecognitionOnly();
+    },
+    [commitPending, startRecognition, stopRecognitionOnly],
+  );
+
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+    if (pushToTalk) {
+      pttActiveRef.current = false;
+      setPttActiveState(false);
+      stopRecognitionOnly();
+      return;
+    }
+    startRecognition();
+  }, [enabled, pushToTalk, startRecognition, stopRecognitionOnly]);
 
   useEffect(() => {
     if (blockCommits) {
       setPhase(isSpeaking() ? "speaking" : "blocked");
-    } else if (listening) {
+    } else if (listening || pttActive) {
       setPhase(isSpeaking() ? "speaking" : "listening");
     }
-  }, [blockCommits, listening]);
+  }, [blockCommits, listening, pttActive]);
 
   useEffect(() => {
     if (!enabled) {
@@ -290,11 +364,21 @@ export function useVoiceSession({
     start,
     stop,
     listening,
+    pttActive,
+    setPttActive,
     transcriptDraft,
     error,
     phase,
     setSpeakingPhase: (speaking: boolean) => {
-      setPhase(speaking ? "speaking" : listening ? "listening" : "idle");
+      setPhase(
+        speaking
+          ? "speaking"
+          : listening || pttActiveRef.current
+            ? "listening"
+            : blockCommitsRef.current
+              ? "blocked"
+              : "idle",
+      );
     },
   };
 }

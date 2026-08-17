@@ -14,11 +14,23 @@ type ThreadListResponse = {
 };
 
 export type ChatMode = "text" | "voice";
+export type VoiceInputMode = "handsfree" | "ptt";
+
+const VOICE_INPUT_MODE_KEY = "sbrain-voice-input-mode";
+
+function readVoiceInputMode(): VoiceInputMode {
+  if (typeof window === "undefined") {
+    return "ptt";
+  }
+  const stored = window.localStorage.getItem(VOICE_INPUT_MODE_KEY);
+  return stored === "handsfree" ? "handsfree" : "ptt";
+}
 
 export function ChatApp() {
   const [threads, setThreads] = useState<ThreadInfo[]>([]);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const [mode, setMode] = useState<ChatMode>("text");
+  const [voiceInputMode, setVoiceInputMode] = useState<VoiceInputMode>("ptt");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,6 +42,10 @@ export function ChatApp() {
     const data = (await response.json()) as ThreadListResponse;
     setThreads(data.threads);
     return data.threads;
+  }, []);
+
+  useEffect(() => {
+    setVoiceInputMode(readVoiceInputMode());
   }, []);
 
   useEffect(() => {
@@ -134,10 +150,45 @@ export function ChatApp() {
             </button>
           </div>
           {mode === "voice" ? (
-            <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">
-              Chrome + mikrofon. Jednorazowe pozwolenie, potem mów bez klikania start/stop. Cisza
-              ~1,2 s wysyła wiadomość.
-            </p>
+            <>
+              <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">
+                Chrome + mikrofon. Bez słuchawek wybierz „Przytrzymaj i mów”, żeby głośnik nie
+                przerywał odpowiedzi agenta.
+              </p>
+              <p className="mb-2 mt-3 text-xs font-medium uppercase tracking-wide text-zinc-500">
+                Wejście głosowe
+              </p>
+              <div className="grid grid-cols-2 gap-1 rounded-lg bg-zinc-200/70 p-1 dark:bg-zinc-900">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVoiceInputMode("ptt");
+                    window.localStorage.setItem(VOICE_INPUT_MODE_KEY, "ptt");
+                  }}
+                  className={`rounded-md px-2 py-2 text-xs font-medium ${
+                    voiceInputMode === "ptt"
+                      ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-100"
+                      : "text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  Przytrzymaj
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVoiceInputMode("handsfree");
+                    window.localStorage.setItem(VOICE_INPUT_MODE_KEY, "handsfree");
+                  }}
+                  className={`rounded-md px-2 py-2 text-xs font-medium ${
+                    voiceInputMode === "handsfree"
+                      ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-100"
+                      : "text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  Wolne ręce
+                </button>
+              </div>
+            </>
           ) : null}
         </div>
 
@@ -181,6 +232,7 @@ export function ChatApp() {
             sessionPath={thread.sessionPath}
             visible={thread.id === activeThreadId}
             voiceMode={mode === "voice"}
+            pushToTalk={mode === "voice" && voiceInputMode === "ptt"}
           />
         ))}
         {!activeThread ? (

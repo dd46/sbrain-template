@@ -47,7 +47,7 @@ npm run chat           # http://127.0.0.1:3000
 
 Neo4j must be up and the catalog synced for KB search tools to return useful results. Cursor MCP remains available in parallel for IDE chat.
 
-**Voice mode (Głos):** In the sidebar, switch from **Czat** to **Głos** (Chrome recommended). Grant microphone access once, then speak naturally — after ~1.2 s of silence the transcript is sent automatically. Replies are read aloud (learning body only; Źródła tables and markdown are stripped for TTS). You can interrupt the agent by speaking again. Headphones reduce echo from the speaker. Firefox/Safari STT is not supported.
+**Voice mode (Głos):** In the sidebar, switch from **Czat** to **Głos** (Chrome recommended). Choose **Przytrzymaj** (default, push-to-talk — best without headphones) or **Wolne ręce** (hands-free, ~1.2 s silence sends the message; use headphones to avoid the mic picking up the speaker). Replies are read aloud (learning body only; Źródła tables and markdown are stripped for TTS). In hands-free mode you can interrupt the agent by speaking again. Firefox/Safari STT is not supported.
 
 ## Scripts
 
