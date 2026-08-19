@@ -7,14 +7,14 @@ import { fileURLToPath } from "node:url";
 import { parseCatalog, normalizeWikiPath } from "../lib/parse-catalog.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const seedDocs = path.join(repoRoot, "docs");
+const seedDocs = path.join(repoRoot, "docs", "knowledge-base");
 
 test("parseCatalog includes root namespace with empty string id", () => {
   const catalog = parseCatalog(seedDocs);
   assert.equal(catalog.errors.length, 0, catalog.errors.join("; "));
   const root = catalog.namespaces.find((n) => n.id === "");
   assert.ok(root, "root namespace missing");
-  assert.equal(root.name, "docs");
+  assert.equal(root.name, "knowledge-base");
   assert.equal(root.parentId, null);
 });
 
@@ -64,6 +64,11 @@ test("licenses_certificates recommendations include Poland certificate intent", 
 
 test("normalizeWikiPath strips docs prefix and .md suffix", () => {
   assert.equal(normalizeWikiPath("docs/sailing/basics/wind.md"), "sailing/basics/wind");
+  assert.equal(
+    normalizeWikiPath("docs/knowledge-base/sailing/basics/wind.md"),
+    "sailing/basics/wind",
+  );
+  assert.equal(normalizeWikiPath("knowledge-base/sailing/basics/wind"), "sailing/basics/wind");
   assert.equal(normalizeWikiPath("/sailing/basics/wind"), "sailing/basics/wind");
 });
 

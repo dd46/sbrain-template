@@ -78,6 +78,15 @@ Secrets go in the dashboard Secrets tab (workspace/team-scoped), not in committe
 - **Remote desktop** — take control of the agent's desktop to try the software, then hand control back.
 - Sharing: send the agent URL; teammates with repo access can view (read-only unless team follow-ups are enabled).
 
+## MCP
+
+- **Team MCP** — HTTP and stdio servers configured from the MCP dropdown on [cursor.com/agents](https://cursor.com/agents).
+- **Cursor Cloud MCP** — built-in diagnostics: transcripts, events, environment info, setup logs.
+
+## API v1 (public beta)
+
+REST API to create, list, stream, and cancel agents and runs; fetch artifacts and usage. Entry point: `POST /v1/agents`. Legacy **v0** API still exists; webhooks documented on v0, v1 webhooks coming soon.
+
 ---
 ## References
 ### Internal
@@ -88,3 +97,4 @@ Secrets go in the dashboard Secrets tab (workspace/team-scoped), not in committe
 - [Capabilities](https://cursor.com/docs/cloud-agent/capabilities)
 - [Help: Cloud Agents](https://cursor.com/help/ai-features/cloud-agents)
 - [cursor.com/agents](https://cursor.com/agents)
+- [Cloud Agents API](https://cursor.com/docs/cloud-agent/api/endpoints)

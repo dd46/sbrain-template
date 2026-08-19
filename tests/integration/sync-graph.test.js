@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseCatalog } from "../../lib/parse-catalog.js";
-import { createDriver, getDocsRoot, verifyConnectivity } from "../../lib/neo4j.js";
+import { createDriver, getKbRoot, verifyConnectivity } from "../../lib/neo4j.js";
 import { ensureConstraintsOnDriver, syncCatalogToGraph } from "../../lib/sync-graph.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -20,7 +20,7 @@ before(async () => {
     process.exit(1);
   }
 
-  const catalog = parseCatalog(getDocsRoot(repoRoot));
+  const catalog = parseCatalog(getKbRoot(repoRoot));
   assert.equal(catalog.errors.length, 0, catalog.errors.join("; "));
   await ensureConstraintsOnDriver(driver);
   await syncCatalogToGraph(driver, catalog);
@@ -33,7 +33,7 @@ after(async () => {
 });
 
 test("sync is idempotent on the sailing seed", async () => {
-  const catalog = parseCatalog(getDocsRoot(repoRoot));
+  const catalog = parseCatalog(getKbRoot(repoRoot));
   const first = await syncCatalogToGraph(driver, catalog);
   const second = await syncCatalogToGraph(driver, catalog);
   assert.equal(first.namespaces, second.namespaces);

@@ -27,7 +27,7 @@ server.registerTool(
     inputSchema: {
       namespace_id: z
         .string()
-        .describe('Dotted namespace id; empty string is the docs/ root'),
+        .describe('Dotted namespace id; empty string is the docs/knowledge-base root'),
       query: z.string().describe("Substring to match in title, summary, or tags"),
       include_children: z
         .boolean()
@@ -53,7 +53,7 @@ server.registerTool(
     inputSchema: {
       file_path: z
         .string()
-        .describe("Docs-relative path, with or without .md prefix"),
+        .describe("Path relative to docs/knowledge-base/, with or without .md"),
     },
   },
   async ({ file_path }) => {
@@ -88,7 +88,7 @@ server.registerTool(
     inputSchema: {
       namespace_id: z
         .string()
-        .describe('Dotted namespace id; empty string is the docs/ root'),
+        .describe('Dotted namespace id; empty string is the docs/knowledge-base root'),
       query: z.string().describe("Natural-language search query"),
       include_children: z
         .boolean()
@@ -119,7 +119,7 @@ server.registerTool(
 server.registerTool(
   "trigger_sync",
   {
-    description: "Reload the docs/ catalog into Neo4j from disk.",
+    description: "Reload the docs/knowledge-base catalog into Neo4j from disk.",
     inputSchema: {},
   },
   async () => {

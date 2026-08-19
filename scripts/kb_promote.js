@@ -7,10 +7,11 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { fileURLToPath } from "node:url";
+import { getKbRoot } from "../lib/neo4j.js";
 import { slugifyHeading } from "../lib/parse-catalog.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const docsRoot = path.join(repoRoot, "docs");
+const kbRoot = getKbRoot(repoRoot);
 
 const SKIP_HEADING = /^(Plan sesji|Format folderu|Quiz\b)/i;
 
@@ -23,6 +24,7 @@ const [conversationArg, targetArg] = process.argv.slice(2);
 if (!conversationArg || !targetArg) {
   process.stderr.write(
     "Usage: kb_promote.js <docs/conversations/session-or-high-level.md> <target/path/without-md>\n",
+    "Target is relative to docs/knowledge-base/ (e.g. sailing/licenses_certificates/note).\n",
   );
   process.exit(1);
 }
@@ -51,8 +53,12 @@ function resolveHighLevelPath(p) {
 const conversationPath = resolveHighLevelPath(inputPath);
 const sessionFolderName = path.basename(path.dirname(conversationPath));
 
-const targetRel = targetArg.replace(/\.md$/, "").replace(/^docs\//, "");
-const targetPath = path.join(docsRoot, `${targetRel}.md`);
+const targetRel = targetArg
+  .replace(/\.md$/, "")
+  .replace(/^docs\/knowledge-base\//, "")
+  .replace(/^knowledge-base\//, "")
+  .replace(/^docs\//, "");
+const targetPath = path.join(kbRoot, `${targetRel}.md`);
 const namespaceId = path.posix.dirname(targetRel).split("/").join(".");
 
 if (!namespaceId && targetRel.includes("/")) {

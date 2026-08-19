@@ -1,18 +1,18 @@
 # Repository Guidelines
 
-Local Second Brain: Markdown notes under `docs/`, synced to Neo4j, queried from Cursor via the **sbrain** MCP server. Stack: Node.js 20+, Docker (Neo4j). See @README.md and @spec.md for the full catalog schema.
+Local Second Brain: Markdown notes under `docs/knowledge-base/`, synced to Neo4j, queried from Cursor via the **sbrain** MCP server. Stack: Node.js 20+, Docker (Neo4j). See @README.md and @spec.md for the full catalog schema.
 
 ## Personal knowledge (non-app prompts)
 
-When the user asks about **anything other than building or changing this Second Brain app**, treat `docs/` as the **source of truth** for their current knowledge — not the open web or model training data.
+When the user asks about **anything other than building or changing this Second Brain app**, treat `docs/knowledge-base/` as the **source of truth** for their current knowledge — not the open web or model training data.
 
-1. **Search the KB first.** Use MCP tools (`search_by_namespace`, `get_document_graph`, `get_recommendations`) or read files under `docs/` directly. Namespace ids are dotted folder paths (e.g. `sailing.licenses_certificates`); root is `""`.
+1. **Search the KB first.** Use MCP tools (`search_by_namespace`, `get_document_graph`, `get_recommendations`) or read files under `docs/knowledge-base/` directly. Namespace ids are dotted folder paths (e.g. `sailing.licenses_certificates`); root is `""`.
 2. **Respect note metadata.** `status` (`draft` | `consumed` | `mastered`), `summary`, `tags`, and `prerequisites` reflect what the user already knows or is learning. Align answers with that level.
 3. **Follow the graph.** Use `get_document_graph` and wiki-links (`[[sailing/basics/wind]]`) to pull related notes before answering.
 4. **Check recommendations.** `recommendations.md` at each namespace level lists intents the user wanted to explore — use them when the question is exploratory.
 5. **Persist every answer.** Write to **`docs/conversations/<session>/`** — `high-level.md`, `history.md`, `sync.md` (`synced: false` until **synchronizuj**), optional `attachments/`. **Empty chat history → new session folder**; ongoing chat → append to that folder only. Structured KB edits only on request. **synchronizuj** → grade quizzes, update `quiz_confirmed` on note H2s, log `sync.md`, `npm run sync`. Optional `kb:promote` creates a note with `track_quiz: true`.
 6. **Cite in chat.** Numbered refs `[n]` at facts + `### Źródła` legend (`KB` / `web` / `model` + **Pewność** High/Medium/Low = citation fidelity, not usefulness). See `docs/conversations/README.md`.
-7. **Sync and commit yourself.** Run `npm run sync` only after structured `docs/` edits. Commit when the turn changed files. **Do not push** unless you explicitly ask.
+7. **Sync and commit yourself.** Run `npm run sync` only after structured `docs/knowledge-base/` edits. Commit when the turn changed files. **Do not push** unless you explicitly ask.
 8. **Hooks enforce this.** @.cursor/rules/kb-persist.mdc applies to every session. @.cursor/hooks.json runs `sessionStart` (inject policy) and `stop` (auto-follow-up if web research was used without a `docs/` write).
 
 App-development prompts (MCP server, sync, tests, infra, `context/changes/`) follow the repo sections below instead.
@@ -23,7 +23,7 @@ Browser chat (`npm run chat`, `web/` + LangGraph) is a separate path from Cursor
 
 | Path | Role |
 |------|------|
-| `docs/` | Knowledge base (namespaces, notes, `recommendations.md`) |
+| `docs/knowledge-base/` | Knowledge base (namespaces, notes, `recommendations.md`) |
 | `docs/conversations/` | Chat session history (not synced to Neo4j) |
 | `lib/` | Parser, Neo4j sync, KB query helpers, LangGraph chat agent |
 | `web/` | Local Next.js chat UI (LangGraph streaming) |
@@ -37,7 +37,7 @@ Browser chat (`npm run chat`, `web/` + LangGraph) is a separate path from Cursor
 |---------|---------|
 | `npm install` | Install dependencies |
 | `docker-compose up -d` | Start Neo4j |
-| `npm run sync` | Reload graph from `docs/` |
+| `npm run sync` | Reload graph from `docs/knowledge-base/` |
 | `npm run chat` | Start local chat UI (`web/`) |
 | `npm run kb:promote -- <session.md> <target/path>` | Promote conversation → structured KB note |
 | `npm test` | Parser unit tests (no Docker) |
@@ -47,10 +47,10 @@ Neo4j Browser: http://localhost:7474 (`neo4j` / `password123`). MCP config: @.cu
 
 ## Conventions
 
-- Root namespace id is `""` (`docs/`). Nested ids match folder paths with dots.
-- Wiki-links: paths relative to `docs/`, no `.md` suffix (e.g. `[[sailing/basics/wind]]`).
+- Root namespace id is `""` (`docs/knowledge-base/`). Nested ids match folder paths with dots.
+- Wiki-links: paths relative to `docs/knowledge-base/`, no `.md` suffix (e.g. `[[sailing/basics/wind]]`).
 - `recommendations.md` is optional at every folder level.
-- After editing `docs/`, run `npm run sync` in the same turn (agent runs it; start Neo4j if needed).
+- After editing `docs/knowledge-base/`, run `npm run sync` in the same turn (agent runs it; start Neo4j if needed).
 
 ## Testing
 

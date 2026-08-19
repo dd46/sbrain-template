@@ -9,7 +9,7 @@ This repo is a **Second Brain**. Session knowledge lives in `docs/conversations/
 
 ## When answering (learning / factual prompts)
 
-1. **Search `docs/` first** (structured notes + past sessions in `docs/conversations/`) before web search or model recall.
+1. **Search `docs/knowledge-base/` first** (structured notes + past sessions in `docs/conversations/`) before web search or model recall.
 2. **One topic per message** — short replies; do not dump whole syllabus blocks in chat.
 3. **New chat (empty history)** → **create** folder `docs/conversations/YYYY-MM-DD-<slug>/` with `high-level.md`, `history.md`, and `sync.md` (`synced: false`). **Ongoing chat** → append to **that** folder only. Never merge chats into one folder.
 4. **Every turn with new content** → append `### Ty` / `### Agent` to `history.md`; update plan + one `##` section in `high-level.md`. Do not only answer in chat.
@@ -17,8 +17,8 @@ This repo is a **Second Brain**. Session knowledge lives in `docs/conversations/
 6. **Attachments** from chat → save under `attachments/` in the session folder.
 7. **Do not ask permission** to save. Format: see `docs/conversations/README.md`.
 8. **Citations in chat:** numbered refs `[1]` at facts + `### Źródła` legend (`KB` / `web` / `model` + **Pewność** `High` / `Medium` / `Low` = fidelity, not exam usefulness). Quizzes without refs.
-9. **Structured KB** (`docs/sailing/`, …) — update **only when the user asks** (never silently from chat). `kb:promote` prepares a note; **synchronizuj** is the only trigger to log impact in `sync.md`, set `quiz_confirmed` on note H2s (after grading quiz answers), and run `npm run sync`.
-10. After editing structured `docs/` (not conversations), **run `npm run sync`** (`docker-compose up -d` if needed).
+9. **Structured KB** (`docs/knowledge-base/`, …) — update **only when the user asks** (never silently from chat). `kb:promote` prepares a note; **synchronizuj** is the only trigger to log impact in `sync.md`, set `quiz_confirmed` on note H2s (after grading quiz answers), and run `npm run sync`.
+10. After editing structured `docs/knowledge-base/` (not conversations), **run `npm run sync`** (`docker-compose up -d` if needed).
 11. **Commit** when the turn produced file edits. **Never push** unless the user explicitly asks.
 
 ## Exemptions
@@ -38,6 +38,6 @@ When the user says **synchronizuj**:
 1. Grade quiz answers in `high-level.md` (answer present + correct enough).
 2. Update structured notes: set `quiz_confirmed: true` and `quiz_confirmed_at` on matching H2 in YAML `sections` (notes with `track_quiz: true`).
 3. Update `sync.md`: `synced: true`, `synced_at`, append dziennik (which notes/H2, quiz results, `npm run sync` summary).
-4. Run `npm run sync` if structured `docs/` changed.
+4. Run `npm run sync` if structured `docs/knowledge-base/` changed.
 
 Do **not** update `sync.md` on every turn — only on synchronizuj.

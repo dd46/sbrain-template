@@ -2,13 +2,13 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseCatalog } from "../lib/parse-catalog.js";
-import { createDriver, getDocsRoot, verifyConnectivity } from "../lib/neo4j.js";
+import { createDriver, getKbRoot, verifyConnectivity } from "../lib/neo4j.js";
 import { ensureConstraintsOnDriver, syncCatalogToGraph } from "../lib/sync-graph.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const docsRoot = getDocsRoot(repoRoot);
+const kbRoot = getKbRoot(repoRoot);
 
-const catalog = parseCatalog(docsRoot);
+const catalog = parseCatalog(kbRoot);
 
 if (catalog.errors.length > 0) {
   process.stderr.write(

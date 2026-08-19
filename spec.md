@@ -6,24 +6,28 @@ Ready-to-copy full specification for Cursor:
 Build a local Second Brain system based on Markdown files, a Neo4j graph database, and the MCP protocol. The system should work from the Cursor editor and allow knowledge management in hierarchical, isolated spaces (namespaces/folders). The entire operational backend (scripts, MCP server) will be written in Node.js (JavaScript).
 
 ## 2. Directory Structure
-Cursor should generate the following file structure at the start. Knowledge spaces (namespaces) are hierarchical (folders within folders). Namespace ids equal the dotted folder path under `docs/` (for example `sailing/basics/` → `sailing.basics`).
+Cursor should generate the following file structure at the start. Knowledge spaces (namespaces) are hierarchical (folders within folders). Namespace ids equal the dotted folder path under `docs/knowledge-base/` (for example `sailing/basics/` → `sailing.basics`).
 
-`docs/` is the root namespace. Its id is the empty string (`namespace: ""`). Notes and `recommendations.md` that sit directly in `docs/` use that id. A parser must treat `""` as a real Namespace node, not as missing.
+`docs/knowledge-base/` is the root namespace. Its id is the empty string (`namespace: ""`). Notes and `recommendations.md` that sit directly in `docs/knowledge-base/` use that id. A parser must treat `""` as a real Namespace node, not as missing.
+
+`docs/conversations/` holds chat session folders and is **not** part of the catalog.
 
 `recommendations.md` is optional at every level (`may`, not `must`). The sample tree includes one at each level only to demonstrate the format.
 
 ```text
 /
-├── docs/                             # Main knowledge base (root namespace, id: "")
-│   ├── recommendations.md            # Recommendations for the root level
-│   ├── sailing/                      # Main Namespace (id: "sailing")
-│   │   ├── recommendations.md        # Recommendations for "sailing"
-│   │   ├── basics/                   # Sub-namespace (id: "sailing.basics")
-│   │   │   ├── recommendations.md    # Recommendations for "sailing.basics"
-│   │   │   └── wind.md
-│   │   └── licenses_certificates/    # Sub-namespace (id: "sailing.licenses_certificates")
-│   │       ├── recommendations.md
-│   │       └── sailing_certificate.md
+├── docs/
+│   ├── conversations/                # Chat sessions (not synced to Neo4j)
+│   └── knowledge-base/               # Main knowledge base (root namespace, id: "")
+│       ├── recommendations.md        # Recommendations for the root level
+│       ├── sailing/                  # Main Namespace (id: "sailing")
+│       │   ├── recommendations.md    # Recommendations for "sailing"
+│       │   ├── basics/               # Sub-namespace (id: "sailing.basics")
+│       │   │   ├── recommendations.md
+│       │   │   └── wind.md
+│       │   └── licenses_certificates/
+│       │       ├── recommendations.md
+│       │       └── sailing_certificate.md
 ├── scripts/                          # Utility scripts and orchestration
 │   └── sync_to_neo4j.js              # Script (Node.js) loading from .md into Neo4j
 ├── mcp_server/                       # MCP server for communication with Cursor
@@ -42,9 +46,9 @@ Main content.
 
 References section at the very bottom.
 
-`namespace: ""` is valid only for notes that sit directly in `docs/`. Nested notes use a dotted id matching their folder path.
+`namespace: ""` is valid only for notes that sit directly in `docs/knowledge-base/`. Nested notes use a dotted id matching their folder path.
 
-Internal wiki-links are paths relative to `docs/`, with forward slashes and no `.md` suffix (for example `[[sailing/basics/wind]]`).
+Internal wiki-links are paths relative to `docs/knowledge-base/`, with forward slashes and no `.md` suffix (for example `[[sailing/basics/wind]]`).
 
 ```markdown
 ---
@@ -78,7 +82,7 @@ Used to collect materials to learn. First-level headings (`#`) define the intent
 ```markdown
 ---
 type: "recommendations"
-namespace: "parent.child" # e.g. "sailing.basics"; use namespace: "" at docs/ root
+namespace: "parent.child" # e.g. "sailing.basics"; use namespace: "" at docs/knowledge-base/ root
 ---
 # I want to understand sail aerodynamics
 - [How a sail works - video](https://youtube.com/watch?v=...)
@@ -161,6 +165,6 @@ Create the file structure. The sample may include `recommendations.md` at each l
 
 Write the contents of `docker-compose.yml` and the MCP server (`server.js`).
 
-Create a sample `wind.md` document and `recommendations.md` in the `docs/sailing/basics/` folder.
+Create a sample `wind.md` document and `recommendations.md` in the `docs/knowledge-base/sailing/basics/` folder.
 
 Write the `sync_to_neo4j.js` script, making sure it correctly processes both regular documents and recommendation files, creating `(:Intent)` and `(:Resource)` nodes.

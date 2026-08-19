@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseCatalog } from "../../lib/parse-catalog.js";
-import { createDriver, getDocsRoot, verifyConnectivity } from "../../lib/neo4j.js";
+import { createDriver, getKbRoot, verifyConnectivity } from "../../lib/neo4j.js";
 import { ensureConstraintsOnDriver, syncCatalogToGraph } from "../../lib/sync-graph.js";
 import {
   getDocumentGraph,
@@ -27,7 +27,7 @@ before(async () => {
     process.exit(1);
   }
 
-  const catalog = parseCatalog(getDocsRoot(repoRoot));
+  const catalog = parseCatalog(getKbRoot(repoRoot));
   await ensureConstraintsOnDriver(driver);
   await syncCatalogToGraph(driver, catalog);
 });
