@@ -1,6 +1,6 @@
 # Second Brain (GraphRAG + MCP)
 
-Local knowledge base: Markdown notes under `docs/`, synced into Neo4j, queried from Cursor via MCP tools.
+Local knowledge base: Markdown notes under `docs/knowledge-base/`, synced into Neo4j, queried from Cursor via MCP tools. Chat sessions live separately in `docs/conversations/`.
 
 See `spec.md` for the full catalog schema (namespaces, notes, `recommendations.md`, wiki-links).
 
@@ -41,9 +41,11 @@ Neo4j must be running and the catalog synced before tools return useful results.
 A local Next.js app runs a LangGraph agent that calls the same `lib/kb-tools.js` helpers as MCP (not through MCP). Conversation memory uses LangGraph **MemorySaver** in the Node process — restarting the chat server clears threads.
 
 ```bash
-cp .env.example .env   # set OPENAI_API_KEY (and Neo4j vars if needed)
+cp .env.example .env   # set TOKENROUTER_API_KEY if you want DeepSeek Pro
 npm run chat           # http://127.0.0.1:3000
 ```
+
+In the sidebar pick **Ollama** (local, `OPENAI_BASE_URL`) or **DeepSeek Pro** (TokenRouter, `TOKENROUTER_API_KEY`). Ollama stays the default.
 
 Neo4j must be up and the catalog synced for KB search tools to return useful results. Cursor MCP remains available in parallel for IDE chat.
 
@@ -53,7 +55,7 @@ Neo4j must be up and the catalog synced for KB search tools to return useful res
 
 | Command | Purpose |
 | ------- | ------- |
-| `npm run sync` | Parse `docs/`, embed bodies locally (Xenova), wipe-reload Neo4j |
+| `npm run sync` | Parse `docs/knowledge-base/`, embed bodies locally (Xenova), wipe-reload Neo4j |
 | `npm run chat` | Start the local chat UI (`web/`, LangGraph + streaming) |
 | `npm run mcp` | Start the MCP server on STDIO (Cursor does this automatically) |
 | `npm test` | Parser unit tests (no Docker) |
@@ -61,9 +63,9 @@ Neo4j must be up and the catalog synced for KB search tools to return useful res
 
 ## Conventions
 
-- **Root namespace** id is the empty string `""` (`docs/`).
+- **Root namespace** id is the empty string `""` (`docs/knowledge-base/`).
 - **`recommendations.md`** is optional at every folder level.
-- **Internal wiki-links** are paths relative to `docs/` without `.md`, e.g. `[[sailing/basics/wind]]`.
+- **Internal wiki-links** are paths relative to `docs/knowledge-base/` without `.md`, e.g. `[[sailing/basics/wind]]`.
 
 ## Reset local Neo4j data
 
@@ -78,3 +80,11 @@ npm run sync
 ## Environment
 
 Copy `.env.example` to `.env` if you need non-default Bolt credentials. Defaults match `docker-compose.yml`.
+
+Chat providers:
+
+| Variable | Purpose |
+| --- | --- |
+| `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_MODEL` | Ollama (OpenAI-compatible local server) |
+| `TOKENROUTER_API_KEY` | TokenRouter key for DeepSeek Pro (`https://api.tokenrouter.com/v1`, model `deepseek-v4-pro`) |
+| `CHAT_PROVIDER` | Optional default: `ollama` (default) or `deepseek_pro` |

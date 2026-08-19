@@ -27,6 +27,7 @@ type ChatPanelProps = {
   visible: boolean;
   voiceMode: boolean;
   pushToTalk?: boolean;
+  providerId: string;
 };
 
 export function ChatPanel({
@@ -35,6 +36,7 @@ export function ChatPanel({
   visible,
   voiceMode,
   pushToTalk = false,
+  providerId,
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [awaitingQuizAnswers, setAwaitingQuizAnswers] = useState(false);
@@ -45,9 +47,9 @@ export function ChatPanel({
     () =>
       new DefaultChatTransport({
         api: "/api/chat",
-        body: { thread_id: threadId },
+        body: { thread_id: threadId, provider: providerId },
       }),
-    [threadId],
+    [threadId, providerId],
   );
 
   const { messages, sendMessage, status, stop, error } = useChat({

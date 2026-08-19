@@ -13,10 +13,18 @@ type ThreadListResponse = {
   threads: ThreadInfo[];
 };
 
-export type ChatMode = "text" | "voice";
+type ChatMode = "text" | "voice";
 export type VoiceInputMode = "handsfree" | "ptt";
+export type ChatProviderId = "ollama" | "deepseek_pro";
+
+type ChatProviderInfo = {
+  id: ChatProviderId;
+  label: string;
+  configured: boolean;
+};
 
 const VOICE_INPUT_MODE_KEY = "sbrain-voice-input-mode";
+const CHAT_PROVIDER_KEY = "sbrain-chat-provider";
 
 function readVoiceInputMode(): VoiceInputMode {
   if (typeof window === "undefined") {
@@ -26,11 +34,28 @@ function readVoiceInputMode(): VoiceInputMode {
   return stored === "handsfree" ? "handsfree" : "ptt";
 }
 
+function isChatProviderId(value: string | null): value is ChatProviderId {
+  return value === "ollama" || value === "deepseek_pro";
+}
+
+function readChatProvider(): ChatProviderId {
+  if (typeof window === "undefined") {
+    return "ollama";
+  }
+  const stored = window.localStorage.getItem(CHAT_PROVIDER_KEY);
+  return isChatProviderId(stored) ? stored : "ollama";
+}
+
 export function ChatApp() {
   const [threads, setThreads] = useState<ThreadInfo[]>([]);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const [mode, setMode] = useState<ChatMode>("text");
   const [voiceInputMode, setVoiceInputMode] = useState<VoiceInputMode>("ptt");
+  const [providerId, setProviderId] = useState<ChatProviderId>("ollama");
+  const [providers, setProviders] = useState<ChatProviderInfo[]>([
+    { id: "ollama", label: "Ollama", configured: true },
+    { id: "deepseek_pro", label: "DeepSeek Pro", configured: false },
+  ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,6 +71,41 @@ export function ChatApp() {
 
   useEffect(() => {
     setVoiceInputMode(readVoiceInputMode());
+    setProviderId(readChatProvider());
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProviders() {
+      try {
+        const response = await fetch("/api/providers");
+        if (!response.ok) {
+          return;
+        }
+        const data = (await response.json()) as { providers?: ChatProviderInfo[] };
+        if (!cancelled && Array.isArray(data.providers) && data.providers.length > 0) {
+          setProviders(data.providers);
+          const preferred = readChatProvider();
+          const selected = data.providers.find((provider) => provider.id === preferred);
+          const next =
+            selected?.configured
+              ? preferred
+              : (data.providers.find((provider) => provider.configured)?.id ?? "ollama");
+          setProviderId(next);
+          if (next !== preferred) {
+            window.localStorage.setItem(CHAT_PROVIDER_KEY, next);
+          }
+        }
+      } catch {
+        // Keep the local fallback list.
+      }
+    }
+
+    void loadProviders();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -149,6 +209,44 @@ export function ChatApp() {
               Głos
             </button>
           </div>
+          <p className="mb-2 mt-3 text-xs font-medium uppercase tracking-wide text-zinc-500">
+            Provider
+          </p>
+          <div className="grid grid-cols-2 gap-1 rounded-lg bg-zinc-200/70 p-1 dark:bg-zinc-900">
+            {providers.map((provider) => {
+              const selected = provider.id === providerId;
+              return (
+                <button
+                  key={provider.id}
+                  type="button"
+                  disabled={!provider.configured}
+                  title={
+                    provider.configured
+                      ? provider.label
+                      : "Ustaw TOKENROUTER_API_KEY w .env"
+                  }
+                  onClick={() => {
+                    setProviderId(provider.id);
+                    window.localStorage.setItem(CHAT_PROVIDER_KEY, provider.id);
+                  }}
+                  className={`rounded-md px-2 py-2 text-xs font-medium ${
+                    selected
+                      ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-100"
+                      : "text-zinc-600 dark:text-zinc-400"
+                  } disabled:cursor-not-allowed disabled:opacity-40`}
+                >
+                  {provider.label}
+                </button>
+              );
+            })}
+          </div>
+          {providers.some((provider) => provider.id === "deepseek_pro" && !provider.configured) ? (
+            <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">
+              DeepSeek Pro wymaga{" "}
+              <code className="rounded bg-zinc-100 px-1 dark:bg-zinc-900">TOKENROUTER_API_KEY</code> w{" "}
+              <code className="rounded bg-zinc-100 px-1 dark:bg-zinc-900">.env</code>.
+            </p>
+          ) : null}
           {mode === "voice" ? (
             <>
               <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">
@@ -233,6 +331,7 @@ export function ChatApp() {
             visible={thread.id === activeThreadId}
             voiceMode={mode === "voice"}
             pushToTalk={mode === "voice" && voiceInputMode === "ptt"}
+            providerId={providerId}
           />
         ))}
         {!activeThread ? (

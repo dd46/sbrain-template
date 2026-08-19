@@ -1,6 +1,7 @@
 import { createUIMessageStreamResponse, type UIMessage } from "ai";
 import { toBaseMessages, toUIMessageStream } from "@ai-sdk/langchain";
 import { streamChat } from "../../../../lib/chat-agent.js";
+import { resolveChatProviderId, resolveProviderConfig } from "../../../../lib/chat-providers.js";
 import { appendConversationTurn } from "../../../../lib/conversation-persist.js";
 import { getThreadMeta, ensureSessionForThread, nextTurnNumber, registerThread } from "../../../../lib/thread-registry.js";
 
@@ -8,6 +9,7 @@ export const runtime = "nodejs";
 
 type ChatRequestBody = {
   thread_id?: string;
+  provider?: string;
   messages?: UIMessage[];
 };
 
@@ -57,10 +59,20 @@ export async function POST(req: Request) {
   }
   registerThread(threadId, meta);
 
+  let provider: string;
+  try {
+    provider = resolveChatProviderId(body.provider);
+    resolveProviderConfig(provider);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Invalid provider";
+    return new Response(message, { status: 400 });
+  }
+
   try {
     const langchainMessages = await toBaseMessages([userMessage]);
     const graphStream = await streamChat(langchainMessages, threadId, undefined, {
       sessionPath: meta.sessionPath,
+      provider,
     });
 
     let assistantText = "";
