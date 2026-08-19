@@ -1,6 +1,6 @@
 # Conversations
 
-Historia sesji z chatem — **osobno od strukturalnej bazy** (`docs/sailing/`, …).
+Historia sesji z chatem — **osobno od strukturalnej bazy** (`docs/knowledge-base/`).
 
 ## Struktura folderu sesji
 
@@ -16,7 +16,7 @@ Jedna sesja chatu = folder `docs/conversations/YYYY-MM-DD-<slug>/`:
 
 - **Pusta historia czatu** (nowy chat) → **nowy folder** sesji z `high-level.md` i `history.md`.
 - **Ten sam chat** → dopisuj do plików **tego** folderu.
-- **Nie trafia do Neo4j** (parser pomija `docs/conversations/`).
+- **Nie trafia do Neo4j** (parser ładuje tylko `docs/knowledge-base/`).
 - **Krótkie wiadomości w chat:** jedno zagadnienie; w `high-level.md` jeden `##` na temat.
 - Na górze `high-level.md` **plan sesji** z checkboxami (`## Nauka`, `## Quiz`).
 - W `history.md` każda wiadomość: `## N` → `### Ty` / `### Agent`.
@@ -27,7 +27,7 @@ Każda wiadomość z treścią merytoryczną:
 
 1. **Referencje numerowane** przy zdaniach/faktach: `[1]`, `[2]` … (wiele źródeł: `[1][3]`).
 2. **Legenda na dole** — sekcja `### Źródła` z tabelą: `# | Typ | Pewność | Źródło`.
-3. **Typy:** `KB` (wiki-link w `docs/`), `web` (URL), `model` (wniosek bez dosłownego cytatu).
+3. **Typy:** `KB` (wiki-link w `docs/knowledge-base/`), `web` (URL), `model` (wniosek bez dosłownego cytatu).
 4. **Pewność** — czy źródło oddane wiernie, bez przekłamania: `High` / `Medium` / `Low`.
 5. Quizy bez referencji — to pytania do użytkownika.
 
@@ -113,7 +113,7 @@ Treść notatki (bez pełnego transkryptu chatu).
 npm run kb:promote -- docs/conversations/2026-08-16-sm-prawo-drogi/high-level.md sailing/licenses_certificates/sm_prawo_drogi
 ```
 
-Potem `npm run sync` (tylko pliki poza `conversations/`).
+Potem `npm run sync` (ładuje `docs/knowledge-base/`, nie `conversations/`).
 
 
 ## Szablon — sync.md
