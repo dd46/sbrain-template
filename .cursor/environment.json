@@ -1,0 +1,18 @@
+{
+  "name": "Second Brain (GraphRAG + MCP)",
+  "user": "ubuntu",
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "terminals": [
+    {
+      "name": "chat",
+      "command": "npm run chat",
+      "description": "Next.js chat UI (LangGraph) on http://127.0.0.1:3000. Needs an LLM provider: local Ollama (OPENAI_BASE_URL) or TOKENROUTER_API_KEY for DeepSeek Pro."
+    }
+  ],
+  "ports": [
+    { "name": "chat", "port": 3000 },
+    { "name": "neo4j-browser", "port": 7474 },
+    { "name": "neo4j-bolt", "port": 7687 }
+  ]
+}
